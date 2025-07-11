@@ -3,6 +3,8 @@ import { Juego } from '../../modelos/Juego';
 import { JuegoServicio } from '../../servicios/juego-servicio';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { environment } from '../../../environment';
+import { CarritoService } from '../../servicios/carrito-servicio';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-juegos',
@@ -30,7 +32,11 @@ export class JuegosComponent implements OnInit, OnDestroy {
     return this.environment.urlApi + '/imagenes/' + url;
   }
 
-  constructor(private juegoServicio: JuegoServicio) {}
+  constructor(
+    private juegoServicio: JuegoServicio,
+    private carritoService: CarritoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.juegoServicio.getJuegos().subscribe(data => {
@@ -92,5 +98,25 @@ export class JuegosComponent implements OnInit, OnDestroy {
       this.currentPage--;
       this.actualizarPaginacion();
     }
+  }
+
+  goToPage(index: number) {
+    if (index >= 0 && index < this.totalPages) {
+      this.currentPage = index;
+      this.actualizarPaginacion();
+    }
+  }
+
+  agregarAlCarrito(juego: Juego) {
+    this.carritoService.addToCart({
+      id: juego.secuencial,
+      title: juego.nombre,
+      price: juego.precio,
+      quantity: 1,
+      genre: juego.genero,
+      rating: juego.ranquin,
+      image: juego.juegoImagens?.[0]?.url
+    });
+    // Abrir el modal del carrito o mostrar feedback
   }
 }

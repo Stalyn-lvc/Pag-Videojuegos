@@ -94,4 +94,11 @@ export class Noticias implements OnInit, OnDestroy {
     this.stopBanner();
     this.currentNoticia = null;
   }
+
+  goToPage(index: number) {
+    if (index >= 0 && index < this.totalPages) {
+      this.currentPage = index;
+      this.actualizarPaginacion();
+    }
+  }
 }

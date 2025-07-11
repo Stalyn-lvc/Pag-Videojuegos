@@ -1,85 +1,81 @@
-.empresa-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.empresa-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.empresa-logo {
-  width: 80px;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-.empresa-nombre {
-  font-size: 24px;
-  margin: 0;
-}
-
-.empresa-detalle {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-}
-
-.cuadro {
-  flex: 1;
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* Slider */
-.banner-slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.banner-slide {
-  flex: 0 0 auto;
-  scroll-snap-align: center;
-  width: 300px;
-  height: 150px;
-}
-
-.banner-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
 .banner-contenedor {
   position: relative;
-  width: 80vw; /* 80% del ancho de la ventana */
-  height: 250px; /* o lo que prefieras */
-  margin: 0 auto; /* centra el banner horizontalmente */
+  width: 70vw;
+  max-width: 1200px;
+  height: 300px;
+  margin: 20px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border: 2px solid #222;
+  background: linear-gradient(135deg, #949494, #292828);
+  animation: brillo-lento 6s infinite;
 }
 
 .banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease forwards;
+}
+
+.banner-contenedor:hover .banner-img {
+  transform: scale(1.02);
 }
 
 .banner-texto {
   position: absolute;
   bottom: 0;
-  width: 100%;
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: #fff;
   font-size: 18px;
+  font-weight: 600;
   text-align: center;
-  border-radius: 0 0 10px 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(2px);
+}
+
+@keyframes brillo-lento {
+  0% {
+    box-shadow: 0 0 8px rgba(171, 169, 170, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(97, 96, 97, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(45, 45, 45, 0.3);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .banner-contenedor {
+    height: 220px;
+    width: 95vw;
+    margin: 15px auto;
+  }
+  .banner-texto {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-contenedor {
+    height: 180px;
+    border-radius: 15px;
+  }
+  .banner-img {
+    border-radius: 15px;
+  }
+  .banner-texto {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

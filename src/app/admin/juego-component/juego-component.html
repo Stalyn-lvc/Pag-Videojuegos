@@ -19,7 +19,7 @@
           <div class="slider-container" *ngIf="juego.juegoImagens?.length">
             <img
               [src]="juego.juegoImagens[juego.sliderIndex || 0].url"
-              class="slider-img"
+              class="slider-img imagen-tabla"
               alt="Imagen juego"
             />
             <div class="slider-controls">
@@ -39,15 +39,17 @@
           </div>
         </td>
         <td>
-          <button class="btn btn-warning btn-sm me-2" (click)="abrirModal(juego)">Editar</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminarJuego(juego.secuencial)">Eliminar</button>
+          <div class="acciones-vertical">
+            <button class="btn btn-warning btn-sm me-2" (click)="abrirModal(juego)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarJuego(juego.secuencial)">Eliminar</button>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
 
   <!-- Modal CSS-only -->
-  <div class="modal" [class.show]="modalVisible">
+  <div class="modal-juego" [class.show]="modalVisible">
     <div class="modal-content">
       <span class="close" (click)="cerrarModal()">&times;</span>
       <h3>{{ formJuego.value.secuencial ? 'Editar Juego' : 'Crear Juego' }}</h3>

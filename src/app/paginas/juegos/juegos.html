@@ -6,17 +6,28 @@
     <p><strong>Precio:</strong> {{ currentJuego.precio | currency:'USD' }}</p>
     <p><strong>Ranquin:</strong> {{ currentJuego.ranquin }}</p>
 
-    <div *ngIf="currentJuego && currentJuego.juegoImagens && currentJuego.juegoImagens.length > 0"
-      class="banner-container">
-      <img [src]="getImagenUrl(currentJuego.juegoImagens[bannerIndex].url)" alt="Imagen banner" class="banner-img" />
-
+    <div *ngIf="currentJuego && currentJuego.juegoImagens && currentJuego.juegoImagens.length > 0" class="banner-container">
+      <img
+        [src]="getImagenUrl(currentJuego.juegoImagens[bannerIndex].url)"
+        alt="Imagen banner"
+        class="banner-img"
+      />
       <div class="miniaturas">
-        <img *ngFor="let img of currentJuego.juegoImagens; let i = index" [src]="getImagenUrl(img.url)"
-          [class.active]="i === bannerIndex" (click)="bannerIndex = i" alt="Miniatura" />
+        <ng-container *ngFor="let img of currentJuego.juegoImagens; let i = index">
+          <img
+            [src]="getImagenUrl(img.url)"
+            (click)="bannerIndex = i"
+            [class.active]="i === bannerIndex"
+            alt="Miniatura"
+          />
+        </ng-container>
       </div>
     </div>
 
-    <button (click)="cerrarDetalle()">Atrás</button>
+    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 18px;">
+      <button class="btn-carrito" (click)="agregarAlCarrito(currentJuego)">Agregar al carrito</button>
+      <button (click)="cerrarDetalle()">Atrás</button>
+    </div>
   </div>
 </ng-container>
 
@@ -31,14 +42,19 @@
         <h3>{{ juego.nombre }}</h3>
         <p>{{ juego.descripcion | slice:0:50 }}...</p>
         <p><strong>Precio:</strong> {{ juego.precio | currency:'USD' }}</p>
-        <button (click)="verJuego(juego)">Ver más</button>
+        <div class="botones-juego">
+          <button (click)="verJuego(juego)">Ver más</button>
+          <button class="btn-carrito" (click)="agregarAlCarrito(juego)">Agregar al carrito</button>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="paginacion">
     <button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
-    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <span class="pagina-numero" [class.activa]="i === currentPage" (click)="goToPage(i)">{{ i + 1 }}</span>
+    </ng-container>
     <button (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">Siguiente</button>
   </div>
 

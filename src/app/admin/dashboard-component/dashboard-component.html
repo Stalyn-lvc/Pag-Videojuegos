@@ -1,3 +1,67 @@
+<div class="dashboard-usuarios">
+  <button class="btn-agregar" (click)="abrirModalUsuario()">Agregar usuario</button>
 
+  <!-- Modal para crear usuario -->
+  <div class="modal-usuario" *ngIf="mostrarModalUsuario">
+    <div class="modal-content">
+      <h3>Crear Usuario</h3>
+      <form #usuarioForm="ngForm" (ngSubmit)="crearUsuario()">
+        <label>Nombre:</label>
+        <input name="nombre" [(ngModel)]="nuevoUsuario.nombre" required />
+        <label>Apellido:</label>
+        <input name="apellido" [(ngModel)]="nuevoUsuario.apellido" required />
+        <label>Teléfono:</label>
+        <input name="telefono" [(ngModel)]="nuevoUsuario.telefono" required />
+        <label>Username:</label>
+        <input name="username" [(ngModel)]="nuevoUsuario.username" required />
+        <label>Password:</label>
+        <input name="password" type="password" [(ngModel)]="nuevoUsuario.password" required />
+        <label>Rol:</label>
+        <select name="tipoUsuarioSecuencial" [(ngModel)]="nuevoUsuario.tipoUsuarioSecuencial" required>
+          <option value="" disabled selected>Seleccione un rol</option>
+          <option *ngFor="let rol of tiposUsuario" [value]="rol.secuencial">{{ rol.nombre }}</option>
+        </select>
+        <div class="modal-actions">
+          <button type="submit" [disabled]="usuarioForm.invalid">Crear</button>
+          <button type="button" (click)="cerrarModalUsuario()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-<router-outlet></router-outlet>
+  <!-- Lista de usuarios -->
+  <div class="lista-usuarios">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Username</th>
+          <th>Rol</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td>{{ usuario.username }}</td>
+          <td>
+            <span class="rol-badge" [class.admin]="usuario.tipoUsuario?.nombre === 'admin'" 
+                  [class.usuario]="usuario.tipoUsuario?.nombre === 'usuario'">
+              {{ usuario.tipoUsuario?.nombre || 'Sin rol' }}
+            </span>
+          </td>
+          <td>
+            <span class="estado-badge" [class.activo]="usuario.estaActivo === 1" 
+                  [class.inactivo]="usuario.estaActivo === 0">
+              {{ usuario.estaActivo === 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

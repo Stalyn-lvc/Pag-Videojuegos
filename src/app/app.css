@@ -5,19 +5,18 @@ html, body {
   padding: 0;
 }
 
-/* Flex container vertical para todo el body */
-body {
+.app-container {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* ocupar toda la altura visible */
 }
 
-
-/* El main crece y ocupa espacio disponible */
 main {
   flex: 1 0 auto;
-  padding: 20px; /* opcional para que no pegue a los bordes */
-  background-color: #fafafa; /* opcional para ver el área del contenido */
+}
+
+.pie-pagina {
+  flex-shrink: 0;
 }
 
 /* Pie de página */

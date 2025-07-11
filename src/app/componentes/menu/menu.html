@@ -1,7 +1,7 @@
 <nav>
   <ng-container *ngIf="isLoggedIn$ | async; else login">
     <ul class="nav-left">
-       <li *ngIf="tipoUsuario   === 'Admin'">
+       <li *ngIf="tipoUsuario === 'Admin'">
           <a [routerLink]="['/admin/usuario']">Usuario</a>
        </li>
        <li *ngIf="tipoUsuario === 'Admin'">
@@ -11,9 +11,13 @@
       <li><a [routerLink]="['/admin/juego']">Juegos</a></li>
     </ul>
     <div class="nav-right">
-      <span>Bienvenido, {{ username }}</span>
+      <button class="cart-icon" (click)="toggleCart()">
+        🛒 <span class="cart-count">{{ cartItemCount }}</span>
+      </button>
+      <span class="user-info">Bienvenido, {{ username }}</span>
       <a (click)="logout()"><i class="fa fa-sign-out"></i> Salir</a>
     </div>
+    <app-contador-token class="token-chip"></app-contador-token>
   </ng-container>
 
   <ng-template #login>
@@ -24,8 +28,52 @@
       <li><a routerLink="/contactos">Contactos</a></li>
     </ul>
     <div class="nav-right">
+      <button class="cart-icon" (click)="toggleCart()">
+        🛒 <span class="cart-count">{{ cartItemCount }}</span>
+      </button>
       <a routerLink="/login"><i class="fa fa-user"></i> Login</a>
     </div>
   </ng-template>
-  <app-contador-token class="token-chip"></app-contador-token>
 </nav>
+
+<!-- Modal del Carrito -->
+<div class="cart-modal" [class.active]="showCartModal" (click)="toggleCart()">
+  <div class="cart-modal-content" (click)="$event.stopPropagation()">
+    <div class="cart-header">
+      <h2>Carrito de Compras</h2>
+      <button class="close-btn" (click)="toggleCart()">×</button>
+    </div>
+    
+    <div class="cart-items" *ngIf="cart.length > 0; else emptyCart">
+      <div class="cart-item" *ngFor="let item of cart">
+        <div class="item-info">
+          <h4>{{ item.title }}</h4>
+          <p>Cantidad: {{ item.quantity }} | ${{ item.price.toFixed(2) }} c/u</p>
+        </div>
+        <div class="item-actions">
+          <div class="item-total">
+            ${{ (item.price * item.quantity).toFixed(2) }}
+          </div>
+          <button class="remove-btn" (click)="removeFromCart(item.id)">
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <p>Tu carrito está vacío</p>
+      </div>
+    </ng-template>
+    
+    <div class="cart-footer" *ngIf="cart.length > 0">
+      <div class="cart-total">
+        <strong>Total: ${{ cartTotal.toFixed(2) }}</strong>
+      </div>
+      <button class="checkout-btn" (click)="checkout()">
+        Proceder al Pago
+      </button>
+    </div>
+  </div>
+</div>

@@ -8,35 +8,58 @@
 
 /* Botón de crear noticia */
 .btn-primary {
-  background-color: #007bff;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+  margin: 0 auto 18px auto;
+  display: block;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
 }
 
 /* Tabla de noticias */
-table {
+.table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th, td {
-  padding: 0.75rem;
-  text-align: left;
-  vertical-align: top;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto 24px auto;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(139,0,0,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 1rem;
 }
 
 th {
-  background-color: #343a40;
-  color: white;
+  background: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.08rem;
+  padding: 1rem 0.5rem;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1.5px solid #f2eaea;
+}
+
+tr:nth-child(even) td {
+  background: #f9f3f3;
 }
 
 td img {
@@ -52,78 +75,124 @@ td img {
 }
 
 .btn-warning {
-  background-color: #ffc107;
-  color: #000;
+  background-color: #ffe066 !important;
+  color: #8b0000 !important;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  margin-top: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-warning:hover {
+  background-color: #fffbe6 !important;
+  color: #b71c1c !important;
 }
 
 .btn-danger {
-  background-color: #dc3545;
-  color: #fff;
+  background-color: #e74c3c !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  margin-top: 10px;
+  transition: background 0.2s, color 0.2s;
 }
+
+.btn-danger:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+}
+
 .slider-container {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 70px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.06);
   position: relative;
-  width: 100px;
-  height: 60px;
-  overflow: hidden;
 }
 
 .slider-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 4px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
 }
 
 .slider-controls {
   position: absolute;
-  top: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .slider-controls button {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  pointer-events: auto;
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  width: 28px;
+  height: 28px;
+  margin: 0 2px;
   border: none;
-  font-size: 1.2rem;
-  width: 24px;
-  height: 100%;
-  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.18s;
+}
+
+.slider-controls button:hover:not(:disabled) {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: scale(1.12);
 }
 
 .slider-controls button:disabled {
-  background-color: rgba(0, 0, 0, 0.2);
-  cursor: not-allowed;
+  background-color: #ccc !important;
+  color: #fff !important;
+  opacity: 0.6;
 }
 
 /* Modal (CSS-only) */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
   display: none;
-  background-color: rgba(0,0,0,0.5);
-  overflow-y: auto;
+  background: rgba(0,0,0,0.5);
   z-index: 1000;
+  overflow-y: auto;
 }
-
 .modal.show {
   display: block;
 }
 
+/* Modal Moderno */
 .modal-content {
-  background-color: #fff;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(139,0,0,0.13);
+  padding: 2.2rem 2rem 1.5rem 2rem;
+  max-width: 520px;
   margin: 5% auto;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 600px;
-  position: relative;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: #8b0000;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
 }
 
 .close {
@@ -140,27 +209,56 @@ form .form-group {
   flex-direction: column;
 }
 
+form .form-group label {
+  color: #8b0000;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+
 form input, form textarea {
-  padding: 0.5rem;
+  border: 1.5px solid #8b0000;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  margin-bottom: 0.5rem;
 }
 
 form button[type="submit"] {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
   margin-top: 1rem;
+  margin-right: 0.5rem;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+}
+
+form button[type="submit"]:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
 }
 
 form button[type="button"] {
-  background-color: #6c757d;
-  color: white;
+  background-color: #6c757d !important;
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
   margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+}
+
+form button[type="button"]:hover {
+  background-color: #343a40 !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
 }
 
 form button:hover {
@@ -169,9 +267,10 @@ form button:hover {
 
 /* Errores de validación */
 .error {
-  color: red;
-  font-size: 0.9rem;
+  color: #e74c3c;
+  font-size: 0.95rem;
   margin-top: 0.25rem;
+  text-align: left;
 }
 
 /* Previsualización de imágenes */
@@ -187,60 +286,42 @@ form button:hover {
 }
 
 .preview-images img {
-  width: 100px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 4px;
+  border: 2px solid #8b0000;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.06);
 }
 
 .preview-images button {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: red;
-  color: white;
+  background: #e74c3c !important;
+  color: #fffbe6 !important;
   border: none;
   border-radius: 50%;
-  cursor: pointer;
   font-size: 0.8rem;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
+  top: -10px;
+  right: -10px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background 0.2s, color 0.2s, transform 0.18s;
+}
+
+.preview-images button:hover {
+  background: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: scale(1.12);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .modal-content {
-    width: 90%;
+    width: 96%;
     margin: 10% auto;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
   }
-
-  table, thead, tbody, th, td, tr {
-    display: block;
+  .table {
+    font-size: 0.95rem;
   }
-
-  thead tr {
-    display: none;
+  th, td {
+    padding: 0.5rem 0.2rem;
   }
-
-  td {
-    position: relative;
-    padding-left: 50%;
-    border: none;
-    border-bottom: 1px solid #ccc;
-  }
-
-  td::before {
-    position: absolute;
-    top: 0;
-    left: 0.75rem;
-    width: 45%;
-    padding-right: 1rem;
-    white-space: nowrap;
-    font-weight: bold;
-  }
-
-  td:nth-of-type(1)::before { content: "Título"; }
-  td:nth-of-type(2)::before { content: "Descripción"; }
-  td:nth-of-type(3)::before { content: "Imágenes"; }
-  td:nth-of-type(4)::before { content: "Acciones"; }
 }

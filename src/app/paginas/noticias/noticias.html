@@ -44,7 +44,9 @@
 
   <div class="paginacion">
     <button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
-    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+      <span class="pagina-numero" [class.activa]="i === currentPage" (click)="goToPage(i)">{{ i + 1 }}</span>
+    </ng-container>
     <button (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">Siguiente</button>
   </div>
 

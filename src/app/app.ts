@@ -11,8 +11,14 @@ import { PiePagina } from './componentes/pie-pagina/pie-pagina';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HttpClientModule,MenuComponent, Encabezado, Banner],
-
+  imports: [
+    RouterOutlet,
+    HttpClientModule,
+    MenuComponent,
+    Encabezado,
+    Banner,
+    PiePagina
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

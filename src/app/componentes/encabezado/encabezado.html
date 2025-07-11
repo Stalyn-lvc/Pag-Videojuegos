@@ -1,6 +1,23 @@
 <div class="empresa-container">
   <div class="empresa-header">
-    <img [src]="empresa?.logo" alt="Logo" class="empresa-logo">
-    <h1 class="empresa-nombre">La empresa: {{ empresa?.nombre }}</h1>
+    <img 
+      *ngIf="empresa?.logo" 
+      [src]="empresa?.logo" 
+      alt="Logo de la empresa" 
+      class="empresa-logo"
+      (click)="goToHome()"
+      style="cursor: pointer;"
+    >
+    <div 
+      *ngIf="!empresa?.logo" 
+      class="no-logo"
+      (click)="goToHome()"
+      style="cursor: pointer;"
+    >
+      Logo no disponible
+    </div>
+    <div class="empresa-info">
+      <h1 class="empresa-nombre">{{ empresa?.nombre || 'Cargando empresa...' }}</h1>
+    </div>
   </div>
-</div>  
+</div>

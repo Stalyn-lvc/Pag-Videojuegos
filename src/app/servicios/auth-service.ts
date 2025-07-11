@@ -17,21 +17,39 @@ export class AuthService {
   }
   private loggedIn$ = new BehaviorSubject<boolean>(this.isAuthenticated());
   constructor(private http: HttpClient) {}
+  
   login(username: string, password: string): Observable<any> {
     return new Observable(observer => {
       this.http.post<any>(this.apiUrl, { username, password }).subscribe(
         res => {
-          const payload = JSON.parse(atob(res.token.split('.')[1]));
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('exp', res.exp);
-          localStorage.setItem('tipoUsuario', payload.tipoUsuario);
-          this.tipoUsuario$.next(payload.tipoUsuario);
-          this.loggedIn$.next(true); 
-          observer.next(res);
-          observer.complete();
+          try {
+            const payload = JSON.parse(atob(res.token.split('.')[1]));
+            console.log('Token payload:', payload);
+            
+            localStorage.setItem('token', res.token);
+            
+            // Guardar la expiración del token JWT si está disponible
+            if (payload.exp) {
+              localStorage.setItem('exp', payload.exp.toString());
+              console.log('Expiración guardada:', payload.exp);
+            } else if (res.exp) {
+              // Fallback al valor del servidor
+              localStorage.setItem('exp', res.exp.toString());
+              console.log('Expiración del servidor guardada:', res.exp);
+            }
+            
+            localStorage.setItem('tipoUsuario', payload.tipoUsuario);
+            this.tipoUsuario$.next(payload.tipoUsuario);
+            this.loggedIn$.next(true); 
+            observer.next(res);
+            observer.complete();
+          } catch (error) {
+            console.error('Error al procesar el token:', error);
+            observer.error(error);
+          }
         },
         err => {
-          console.error('Error en login:', err); // <-- Aquí verás el detalle del error en la consola
+          console.error('Error en login:', err);
           observer.error(err);
         }
       );
@@ -41,10 +59,32 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     const exp = localStorage.getItem('exp');
-    if (!token || !exp) return false;
-    const now = Date.now();
-    const expiration = parseInt(exp, 10);
-    return now < expiration;
+    
+    if (!token || !exp) {
+      console.log('No hay token o expiración');
+      return false;
+    }
+    
+    try {
+      const now = Date.now();
+      const expiration = parseInt(exp, 10);
+      
+      // Si la expiración está en segundos, convertir a milisegundos
+      const expirationMs = expiration < 1e12 ? expiration * 1000 : expiration;
+      
+      const isValid = now < expirationMs;
+      console.log('Verificación de autenticación:', {
+        now,
+        expiration,
+        expirationMs,
+        isValid
+      });
+      
+      return isValid;
+    } catch (error) {
+      console.error('Error al verificar autenticación:', error);
+      return false;
+    }
   }
 
   authStatus(): Observable<boolean> {
@@ -54,8 +94,13 @@ export class AuthService {
   getUsername(): string {
     const token = localStorage.getItem('token');
     if (!token) return '';
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.sub || '';
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || '';
+    } catch (error) {
+      console.error('Error al obtener username:', error);
+      return '';
+    }
   }
 
   logout() {

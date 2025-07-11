@@ -3,6 +3,7 @@ import { environment } from '../../environment';
 import { Observable } from 'rxjs';
 import { Usuario } from '../modelos/Usuario';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TipoUsuario } from '../modelos/TipoUsuario';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class UsuarioService {
 
   eliminarUsuario(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+  }
+
+  getTiposUsuario(): Observable<TipoUsuario[]> {
+    return this.http.get<TipoUsuario[]>(`${environment.urlApi}/tiposUsuario`, { headers: this.getAuthHeaders() });
   }
 }

@@ -1,4 +1,66 @@
-<footer>
-  <h1>Año: {{ empresa?.anio }}</h1>
-  <h1>Realizado por: {{ empresa?.realizadopor }}</h1>
+<footer class="pie-pagina">
+  <div class="contenido-pie">
+    <!-- Sección principal con logo y nombre -->
+    <div class="seccion-principal">
+      <div class="info-basica">
+        <h3 *ngIf="empresa?.nombre" class="nombre-empresa">{{ empresa?.nombre }}</h3>
+        <p *ngIf="empresa?.anio" class="anio">
+          <span class="icono">📅</span>
+          Desde {{ empresa?.anio }}
+        </p>
+        <p *ngIf="empresa?.realizadopor" class="realizador">
+          <span class="icono">👨‍💻</span>
+          Desarrollado por {{ empresa?.realizadopor }}
+        </p>
+      </div>
+      <div class="redes-sociales">
+        <div class="titulo-redes">Síguenos en redes sociales</div>
+        <div class="iconos-redes">
+          <a *ngIf="redesSociales.facebook" [href]="redesSociales.facebook" class="enlace-red facebook" target="_blank" rel="noopener">
+            <span class="icono-red">🌐</span> Facebook
+          </a>
+          <a *ngIf="redesSociales.instagram" [href]="redesSociales.instagram" class="enlace-red instagram" target="_blank" rel="noopener">
+            <span class="icono-red">📸</span> Instagram
+          </a>
+          <a *ngIf="redesSociales.youtube" [href]="redesSociales.youtube" class="enlace-red youtube" target="_blank" rel="noopener">
+            <span class="icono-red">▶️</span> YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Línea divisoria -->
+    <div class="divisor"></div>
+
+    <!-- Pie inferior con información legal -->
+    <div class="pie-inferior">
+      <div class="contenido-inferior">
+        <div class="info-legal">
+          <p class="copyright">
+            © {{ currentYear }} 
+            <span *ngIf="empresa?.nombre">{{ empresa?.nombre }}</span>
+            <span *ngIf="!empresa?.nombre">Todos los derechos reservados</span>
+          </p>
+          <p *ngIf="empresa?.realizadopor" class="desarrollador">
+            Desarrollado por {{ empresa?.realizadopor }}
+          </p>
+        </div>
+        
+        <div class="enlaces-legales">
+          <a href="/privacidad" class="enlace-legal">Política de Privacidad</a>
+          <span class="separador">|</span>
+          <a href="/terminos" class="enlace-legal">Términos y Condiciones</a>
+          <span class="separador">|</span>
+          <a href="/cookies" class="enlace-legal">Política de Cookies</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje cuando no hay información -->
+    <div *ngIf="!empresa || (!empresa?.nombre && !empresa?.anio && !empresa?.realizadopor)" 
+         class="sin-informacion">
+      <p>Información corporativa no disponible en este momento.</p>
+      <p>Para más información, contacte con el administrador del sitio.</p>
+    </div>
+  </div>
 </footer>
