@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto - Rockstar Games</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Tu CSS -->
+  <link rel="stylesheet" href="contactos.css" />
+</head>
+
+<body>
+  <div class="paginaContacto">
+    <header class="encabezadoSeccion">
+      <h1><i class="fas fa-gamepad"></i> Rockstar Games - Contáctanos</h1>
+      <p>
+        Si tienes dudas o sugerencias sobre nuestra página web, por favor completa el
+        siguiente formulario y nos pondremos en contacto contigo a la brevedad.
+      </p>
+    </header>
+
+    <div id="formulario_contactos_container" class="tarjetaFormulario">
+      <div class="campo-formulario">
+        <label for="nombre"><i class="fas fa-user"></i> Nombre completo</label>
+        <input type="text" id="nombre" [(ngModel)]="nombre" placeholder="Ingrese su nombre" required />
+      </div>
+      <div class="campo-formulario">
+        <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
+        <input type="email" id="email" [(ngModel)]="email" placeholder="Ingrese su correo" required />
+      </div>
+      <div class="campo-formulario">
+        <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
+        <input type="tel" id="telefono" [(ngModel)]="telefono" placeholder="Ingrese su teléfono" required />
+      </div>
+      <div class="campo-formulario">
+        <label for="asunto"><i class="fas fa-pen"></i> Asunto</label>
+        <input type="text" id="asunto" [(ngModel)]="asunto" placeholder="Ingrese el asunto" required />
+      </div>
+      <div class="campo-formulario">
+        <label for="mensaje"><i class="fas fa-comment-dots"></i> Mensaje</label>
+        <textarea id="mensaje" [(ngModel)]="mensaje" placeholder="Ingrese su mensaje" required rows="5"></textarea>
+      </div>
+
+      <div class="botones-container">
+        <button type="button" class="boton-secundario" (click)="limpiarFormulario()" [disabled]="enviando">
+          <i class="fas fa-eraser"></i> Limpiar
+        </button>
+        <button type="button" class="boton-primario" (click)="enviarMensaje()" [disabled]="enviando">
+          <i class="fas fa-paper-plane"></i> Enviar
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal de éxito -->
+    <div class="modal-exito" *ngIf="mostrarModalExito">
+      <div class="modal-exito-contenido">
+        <p>¡Mensaje enviado exitosamente!</p>
+        <button (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+
+    <div id="estadoEnvio" *ngIf="estadoEnvio">
+      <span [style.color]="colorEstado">{{ estadoEnvio }}</span>
+    </div>
+
+    <div class="redes-sociales">
+      <h3><i class="fas fa-globe"></i> Síguenos en nuestras redes</h3>
+      <div class="iconos-redes">
+        <a href="https://www.facebook.com/RockstarGames" target="_blank" title="Facebook"><i
+            class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com/RockstarGames" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/rockstargames/" target="_blank" title="Instagram"><i
+            class="fab fa-instagram"></i></a>
+        <a href="https://www.youtube.com/rockstargames" target="_blank" title="YouTube"><i
+            class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <div class="notaProyecto">
+      <p>
+        Noticias sobre los mejores juegos de Rockstar Games.
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

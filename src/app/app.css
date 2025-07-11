@@ -1,0 +1,40 @@
+/* Reseteo básico */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Flex container vertical para todo el body */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ocupar toda la altura visible */
+}
+
+
+/* El main crece y ocupa espacio disponible */
+main {
+  flex: 1 0 auto;
+  padding: 20px; /* opcional para que no pegue a los bordes */
+  background-color: #fafafa; /* opcional para ver el área del contenido */
+}
+
+/* Pie de página */
+app-pie-pagina {
+  display: block;
+  flex-shrink: 0;
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 1rem;
+  margin-top: 30px; /* Separación desde el contenido anterior */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .empresa-detalle {
+    flex-direction: column;
+  }
+}

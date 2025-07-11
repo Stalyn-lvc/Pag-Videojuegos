@@ -1,0 +1,8 @@
+<div *ngIf="empresa?.banners?.[slideIndex] as banner">
+  <div class="banner-contenedor">
+    <img [src]="banner.url" alt="Banner" class="banner-img">
+    <div class="banner-texto">
+      {{ banner.descripcion }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 20px;
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left li {
+  list-style: none;
+  margin-right: 15px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+.user-info {
+  margin-right: 10px;
+}
+.token-chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f0f4ff;
+  color: #0033cc;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  margin-left: 20px;
+}
+
+.token-chip .icon-clock {
+  margin-right: 6px;
+}
+
+.token-chip .countdown {
+  min-width: 2.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Si quieres una animación de pulso cuando esté por expirar */
+.token-chip.expiring {
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { background-color: #f0f4ff; }
+  to   { background-color: #ffe5e5; }
+}
+

@@ -1,0 +1,16 @@
+.juegos-admin {
+  padding: 1rem;
+}
+.juegos-admin ul {
+  list-style: none;
+  padding: 0;
+}
+.juegos-admin li {
+  margin-bottom: 0.5rem;
+}
+.juegos-admin form {
+  margin-top: 1rem;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 4px;
+} 

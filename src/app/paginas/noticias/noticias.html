@@ -1,0 +1,54 @@
+<ng-container *ngIf="currentNoticia; else listadoNoticias">
+  <div class="detalle-noticia">
+    <h2>{{ currentNoticia.titulo }}</h2>
+    <p>{{ currentNoticia.descripcion }}</p>
+
+   <div *ngIf="currentNoticia && currentNoticia.noticiaImagens && currentNoticia.noticiaImagens.length > 0"
+     class="banner-container">
+      <img
+        [src]="currentNoticia.noticiaImagens[bannerIndex].url"
+        alt="Imagen banner"
+        class="banner-img"
+      />
+
+      <div class="miniaturas">
+        <img
+          *ngFor="let img of currentNoticia.noticiaImagens; let i = index"
+          [src]="img.url"
+          [class.active]="i === bannerIndex"
+          (click)="bannerIndex = i"
+          alt="Miniatura"
+        />
+      </div>
+    </div>
+
+    <button (click)="cerrarDetalle()">Atrás</button>
+  </div>
+</ng-container>
+
+
+<!-- Listado -->
+<ng-template #listadoNoticias>
+  <div *ngIf="noticiasPaginadas.length > 0; else noNoticias" class="grid-noticias">
+    <div *ngFor="let noticia of noticiasPaginadas.slice(0, 4)" class="noticia-card">
+      <div class="imagen-container">
+        <img [src]="noticia.noticiaImagens[0].url" alt="Imagen resumen" />
+      </div>
+      <div class="contenido-noticia">
+        <h3>{{ noticia.titulo }}</h3>
+        <p>{{ noticia.descripcion | slice:0:50 }}...</p>
+        <button (click)="verNoticia(noticia)">Ver más</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="paginacion">
+    <button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">Siguiente</button>
+  </div>
+
+  <ng-template #noNoticias>
+    <p>No hay noticias para mostrar.</p>
+  </ng-template>
+</ng-template>

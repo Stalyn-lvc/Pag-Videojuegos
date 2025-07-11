@@ -1,0 +1,48 @@
+<ng-container *ngIf="currentJuego; else listadoJuegos">
+  <div class="detalle-juego">
+    <h2>{{ currentJuego.nombre }}</h2>
+    <p>{{ currentJuego.descripcion }}</p>
+    <p><strong>Género:</strong> {{ currentJuego.genero }}</p>
+    <p><strong>Precio:</strong> {{ currentJuego.precio | currency:'USD' }}</p>
+    <p><strong>Ranquin:</strong> {{ currentJuego.ranquin }}</p>
+
+    <div *ngIf="currentJuego && currentJuego.juegoImagens && currentJuego.juegoImagens.length > 0"
+      class="banner-container">
+      <img [src]="getImagenUrl(currentJuego.juegoImagens[bannerIndex].url)" alt="Imagen banner" class="banner-img" />
+
+      <div class="miniaturas">
+        <img *ngFor="let img of currentJuego.juegoImagens; let i = index" [src]="getImagenUrl(img.url)"
+          [class.active]="i === bannerIndex" (click)="bannerIndex = i" alt="Miniatura" />
+      </div>
+    </div>
+
+    <button (click)="cerrarDetalle()">Atrás</button>
+  </div>
+</ng-container>
+
+<!-- Listado de juegos -->
+<ng-template #listadoJuegos>
+  <div *ngIf="juegosPaginados.length > 0; else noJuegos" class="grid-juegos">
+    <div *ngFor="let juego of juegosPaginados" class="juego-card">
+      <div class="imagen-container">
+        <img [src]="getImagenUrl(juego.juegoImagens[0].url)" alt="Imagen resumen" />
+      </div>
+      <div class="contenido-juego">
+        <h3>{{ juego.nombre }}</h3>
+        <p>{{ juego.descripcion | slice:0:50 }}...</p>
+        <p><strong>Precio:</strong> {{ juego.precio | currency:'USD' }}</p>
+        <button (click)="verJuego(juego)">Ver más</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="paginacion">
+    <button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">Siguiente</button>
+  </div>
+
+  <ng-template #noJuegos>
+    <p>No hay juegos para mostrar.</p>
+  </ng-template>
+</ng-template>

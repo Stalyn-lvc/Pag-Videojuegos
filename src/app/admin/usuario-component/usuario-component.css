@@ -1,0 +1,101 @@
+/* estilos.css */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+h2, h3 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+form input {
+  flex: 1 1 45%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form input[type="number"] {
+  max-width: 100px;
+}
+
+form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+form button[type="button"] {
+  background-color: #6c757d;
+}
+
+form button:hover {
+  opacity: 0.9;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: #f1f1f1;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li button {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+li button:hover {
+  opacity: 0.85;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+  form input {
+    flex: 1 1 100%;
+  }
+
+  form button {
+    width: 100%;
+  }
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  li button {
+    margin-top: 0.5rem;
+  }
+}

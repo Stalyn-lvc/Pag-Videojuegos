@@ -1,0 +1,31 @@
+<div class="container">
+  <h2>Gestión de Usuarios</h2>
+
+  <form (ngSubmit)="guardarUsuario()" #formUsuario="ngForm">
+    <input [(ngModel)]="usuarioSeleccionado.nombre" name="nombre" placeholder="Nombre" required>
+    <input [(ngModel)]="usuarioSeleccionado.apellido" name="apellido" placeholder="Apellido" required>
+    <input [(ngModel)]="usuarioSeleccionado.telefono" name="telefono" placeholder="Teléfono">
+    <input [(ngModel)]="usuarioSeleccionado.username" name="username" placeholder="Usuario" required>
+    <input [(ngModel)]="usuarioSeleccionado.password" name="password" placeholder="Contraseña" required type="password">
+    <input [(ngModel)]="usuarioSeleccionado.estaActivo" name="estaActivo" type="number" placeholder="Activo (1 o 0)">
+    
+    <select [(ngModel)]="usuarioSeleccionado.tipoUsuario" name="tipoUsuario" required>
+      <option *ngFor="let tipo of tiposUsuario" [ngValue]="tipo">
+        {{ tipo.nombre }}
+      </option>
+    </select>
+    <button type="submit">{{ editando ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="resetFormulario()">Limpiar</button>
+  </form>
+
+  <hr>
+
+  <h3>Lista de Usuarios</h3>
+  <ul>
+    <li *ngFor="let usuario of usuarios">
+      {{ usuario.nombre }} {{ usuario.apellido }} - {{ usuario.username }}
+      <button (click)="seleccionarUsuario(usuario)">Editar</button>
+    </li>
+  </ul>
+</div>
+

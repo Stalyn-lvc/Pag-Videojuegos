@@ -1,0 +1,117 @@
+/* Estilo general */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Contenedor principal */
+.empresa-container {
+  padding: 20px;
+  margin-bottom: 30px; /* Separación con el pie de página */
+}
+
+/* Cabecera de empresa */
+.empresa-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.empresa-logo {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.empresa-nombre {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Detalle de misión y visión */
+.empresa-detalle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.cuadro {
+  flex: 1 1 300px;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Slider banners */
+.banner-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.banner-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: 300px;
+  height: 150px;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.banner-contenedor {
+  position: relative;
+  width: 80vw;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.banner-texto {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Pie de página */
+app-pie-pagina {
+  display: block;
+  flex-shrink: 0;
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 1rem;
+  margin-top: 30px; /* Separación desde el contenido anterior */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .empresa-detalle {
+    flex-direction: column;
+  }
+}

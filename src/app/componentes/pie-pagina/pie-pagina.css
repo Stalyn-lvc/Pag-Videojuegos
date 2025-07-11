@@ -1,0 +1,24 @@
+footer {
+  background-color: #222;          /* Fondo oscuro */
+  color: #eee;                    /* Texto claro */
+  padding: 15px 20px;             /* Espaciado interno */
+  text-align: center;             /* Centrar texto */
+  font-family: Arial, sans-serif; /* Tipografía legible */
+  font-size: 1rem;                /* Tamaño texto */
+  position: fixed;                /* Fijar al pie de la página */
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+  z-index: 1000;                 /* Para que esté sobre otros elementos */
+}
+footer h1 {
+  margin: 5px 0;
+  font-weight: normal;
+}
+app-pie-pagina {
+  display: block;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}

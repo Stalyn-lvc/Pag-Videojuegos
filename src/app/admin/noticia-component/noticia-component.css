@@ -1,0 +1,246 @@
+/* Contenedor general */
+.container {
+  padding: 1rem;
+  max-width: 1000px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Botón de crear noticia */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Tabla de noticias */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #343a40;
+  color: white;
+}
+
+td img {
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Botones de acción */
+.btn-sm {
+  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+.slider-container {
+  position: relative;
+  width: 100px;
+  height: 60px;
+  overflow: hidden;
+}
+
+.slider-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.slider-controls {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider-controls button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  width: 24px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.slider-controls button:disabled {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: not-allowed;
+}
+
+/* Modal (CSS-only) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background-color: rgba(0,0,0,0.5);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+form .form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+form input, form textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+form button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+  margin-left: 0.5rem;
+}
+
+form button:hover {
+  opacity: 0.9;
+}
+
+/* Errores de validación */
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Previsualización de imágenes */
+.preview-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.preview-images div {
+  position: relative;
+  margin-right: 8px;
+}
+
+.preview-images img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.preview-images button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.8rem;
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    margin: 10% auto;
+  }
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    display: none;
+  }
+
+  td {
+    position: relative;
+    padding-left: 50%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+  }
+
+  td::before {
+    position: absolute;
+    top: 0;
+    left: 0.75rem;
+    width: 45%;
+    padding-right: 1rem;
+    white-space: nowrap;
+    font-weight: bold;
+  }
+
+  td:nth-of-type(1)::before { content: "Título"; }
+  td:nth-of-type(2)::before { content: "Descripción"; }
+  td:nth-of-type(3)::before { content: "Imágenes"; }
+  td:nth-of-type(4)::before { content: "Acciones"; }
+}

@@ -1,0 +1,10 @@
+<div class="login-container">
+  <h2>Iniciar sesión</h2>
+  <form (submit)="iniciarSesion()">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" [(ngModel)]="username" name="usuario" required />
+    <label for="clave">Contraseña</label>
+    <input type="password" id="clave" [(ngModel)]="password" name="clave" required />
+    <button type="submit">Ingresar</button>
+  </form>
+</div>

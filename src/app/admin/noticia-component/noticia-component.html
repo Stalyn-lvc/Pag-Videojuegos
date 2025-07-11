@@ -1,0 +1,100 @@
+<button class="btn btn-primary my-2" (click)="abrirModal()">Crear Nueva Noticia</button>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Descripción</th>
+      <th>Imágenes</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let noticia of noticias">
+      <td>{{ noticia.titulo }}</td>
+      <td>{{ noticia.descripcion | slice:0:100 }}...</td>
+      <td>
+        <div class="slider-container" *ngIf="noticia.noticiaImagens?.length">
+          <img
+            [src]="noticia.noticiaImagens[noticia.sliderIndex || 0]?.url"
+            class="slider-img"
+            alt="Imagen noticia"
+          />
+            <div class="slider-controls">
+              <button
+                (click)="cambiarImagen(noticia, -1)"
+                [disabled]="(noticia.sliderIndex || 0) === 0"
+              >
+                ‹
+              </button>
+              <button
+                (click)="cambiarImagen(noticia, 1)"
+                [disabled]="(noticia.sliderIndex || 0) === noticia.noticiaImagens.length - 1"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </td>
+      <td>
+        <button class="btn btn-warning btn-sm me-2" (click)="abrirModal(noticia)">Editar</button>
+        <button class="btn btn-danger btn-sm" (click)="eliminarNoticia(noticia.secuencial)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal CSS-only -->
+<div class="modal" [class.show]="modalVisible">
+  <div class="modal-content">
+    <span class="close" (click)="cerrarModal()">&times;</span>
+    <h3>{{ formNoticia.value.secuencial ? 'Editar Noticia' : 'Crear Noticia' }}</h3>
+
+    <form [formGroup]="formNoticia" (ngSubmit)="guardarNoticia()">
+      <div class="form-group">
+        <label>Título:</label>
+        <input type="text" formControlName="titulo" />
+        <div class="error" *ngIf="formNoticia.get('titulo')?.invalid && formNoticia.get('titulo')?.touched">
+          El título es obligatorio.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción:</label>
+        <textarea rows="5" formControlName="descripcion"></textarea>
+        <div class="error" *ngIf="formNoticia.get('descripcion')?.invalid && formNoticia.get('descripcion')?.touched">
+          La descripción es obligatoria.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Subir imágenes (archivos):</label>
+        <input type="file" multiple (change)="onFileChange($event)" />
+      </div>
+
+      <div class="form-group">
+        <label>Agregar URL de imagen:</label>
+        <input
+          type="text"
+          name="nuevaUrl"
+          [(ngModel)]="nuevaUrl"
+          [ngModelOptions]="{standalone: true}"
+          placeholder="https://ejemplo.com/imagen.jpg"
+          (input)="onInput($event)"
+        />
+        <button type="button" (click)="agregarUrl()">Agregar URL</button>
+      </div>
+
+      <div class="preview-images">
+        <div *ngFor="let img of imagenesPreview; let i = index" style="display:inline-block; position: relative; margin:5px;">
+          <img [src]="img" width="100" />
+          <button type="button" (click)="eliminarImagen(i)" style="position:absolute; top:0; right:0;">X</button>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="formNoticia.invalid">Guardar</button>
+      <button type="button" (click)="cerrarModal()">Cancelar</button>
+    </form>
+  </div>
+</div>
+

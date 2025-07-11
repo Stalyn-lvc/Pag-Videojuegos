@@ -1,0 +1,68 @@
+/* Estilo general del contenedor */
+div {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Título principal */
+h2 {
+  text-align: center;
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+/* Subtítulo */
+h3 {
+  color: #333;
+  margin-top: 30px;
+  border-bottom: 2px solid #1976d2;
+  padding-bottom: 5px;
+}
+
+/* Etiquetas y entradas */
+label {
+  display: block;
+  margin-bottom: 12px;
+  color: #333;
+  font-weight: bold;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Botones */
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin-top: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #145ca8;
+}
+
+/* Estilo para cada banner */
+div[ng-reflect-ng-for-of] {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}

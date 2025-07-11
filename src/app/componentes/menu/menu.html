@@ -1,0 +1,31 @@
+<nav>
+  <ng-container *ngIf="isLoggedIn$ | async; else login">
+    <ul class="nav-left">
+       <li *ngIf="tipoUsuario   === 'Admin'">
+          <a [routerLink]="['/admin/usuario']">Usuario</a>
+       </li>
+       <li *ngIf="tipoUsuario === 'Admin'">
+        <a [routerLink]="['/admin/empresa']">Empresa</a>
+      </li>
+      <li><a [routerLink]="['/admin/noticia']">Noticias</a></li>
+      <li><a [routerLink]="['/admin/juego']">Juegos</a></li>
+    </ul>
+    <div class="nav-right">
+      <span>Bienvenido, {{ username }}</span>
+      <a (click)="logout()"><i class="fa fa-sign-out"></i> Salir</a>
+    </div>
+  </ng-container>
+
+  <ng-template #login>
+    <ul class="nav-left">
+      <li><a routerLink="/">Inicio</a></li>
+      <li><a routerLink="/noticias">Noticias</a></li>
+      <li><a routerLink="/juegos">Juegos</a></li>
+      <li><a routerLink="/contactos">Contactos</a></li>
+    </ul>
+    <div class="nav-right">
+      <a routerLink="/login"><i class="fa fa-user"></i> Login</a>
+    </div>
+  </ng-template>
+  <app-contador-token class="token-chip"></app-contador-token>
+</nav>
