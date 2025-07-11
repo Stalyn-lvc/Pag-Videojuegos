@@ -3,6 +3,7 @@ import { Noticia } from '../../modelos/Noticias';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NoticiaServicio } from '../../servicios/noticia-servicio';
+import { environment } from '../../../environment';
 import * as bootstrap from 'bootstrap';
 
 @Component({
@@ -28,6 +29,9 @@ export class NoticiaComponent implements OnInit {
   constructor(private fb: FormBuilder, private noticiaService: NoticiaServicio) {}
 
   ngOnInit(): void {
+    console.log('🚀 NoticiaComponent inicializado');
+    console.log('🔍 Verificando autenticación...');
+    
     this.formNoticia = this.fb.group({
       secuencial: [null],
       titulo: ['', Validators.required],
@@ -35,6 +39,7 @@ export class NoticiaComponent implements OnInit {
       estadoNoticia: [1],
     });
 
+    console.log('📋 Formulario inicializado');
     this.cargarNoticias();
   }
   cambiarImagen(noticia: any, direccion: number) {
@@ -47,7 +52,25 @@ export class NoticiaComponent implements OnInit {
     }
   }
   cargarNoticias() {
-    this.noticiaService.getNoticias().subscribe((data) => (this.noticias = data));
+    console.log('🔄 Cargando noticias...');
+    console.log('🌐 URL del API:', `${environment.urlApi}/noticia`);
+    
+    this.noticiaService.getNoticias().subscribe({
+      next: (data) => {
+        console.log('✅ Noticias cargadas:', data);
+        console.log('📊 Cantidad de noticias:', data.length);
+        this.noticias = data;
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar noticias:', error);
+        console.error('🔍 Detalles del error:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url
+        });
+      }
+    });
   }
 
   abrirModal(noticia?: Noticia) {

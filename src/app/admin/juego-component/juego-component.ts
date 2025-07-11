@@ -42,8 +42,15 @@ export class JuegoComponent implements OnInit {
   }
 
   cargarJuegos() {
-    this.juegoServicio.getJuegos().subscribe(juegos => {
-      this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+    console.log('🔄 Cargando juegos...');
+    this.juegoServicio.getJuegos().subscribe({
+      next: (juegos) => {
+        console.log('✅ Juegos cargados:', juegos);
+        this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar juegos:', error);
+      }
     });
   }
 

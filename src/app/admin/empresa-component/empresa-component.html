@@ -1,38 +1,90 @@
-<div>
-  <h2>Editar Empresa</h2>
-
-  <label>Nombre:
-    <input [(ngModel)]="empresa.nombre" />
-  </label>
-
-  <label>Logo:
-    <input [(ngModel)]="empresa.logo" />
-  </label>
-
-  <label>Misión:
-    <textarea [(ngModel)]="empresa.mision"></textarea>
-  </label>
-
-  <label>Visión:
-    <textarea [(ngModel)]="empresa.vision"></textarea>
-  </label>
-
-  <h3>Banners</h3>
-  <button (click)="agregarBanner()">Agregar Banner</button>
-
-  <div *ngFor="let banner of empresa?.banners; let i = index" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-    <label>URL:
-      <input [(ngModel)]="banner.url" />
-    </label>
-    <label>Descripción:
-      <input [(ngModel)]="banner.descripcion" />
-    </label>
-    <label>Está Banner (0 o 1):
-      <input type="number" [(ngModel)]="banner.estaBanner" />
-    </label>
-    <button (click)="quitarBanner(i)">Quitar</button>
+<div class="container">
+  <h2>Gestión de Empresa</h2>
+  
+  <!-- Información de la empresa -->
+  <div class="empresa-info">
+    <h3>Información General</h3>
+    <div class="form-section">
+      <div class="form-group">
+        <label>Nombre de la Empresa:</label>
+        <input type="text" [(ngModel)]="empresa.nombre" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label>Logo (URL):</label>
+        <input type="text" [(ngModel)]="empresa.logo" class="form-control" placeholder="https://ejemplo.com/logo.png" />
+      </div>
+      
+      <div class="form-group">
+        <label>Año:</label>
+        <input type="text" [(ngModel)]="empresa.anio" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label>Realizado por:</label>
+        <input type="text" [(ngModel)]="empresa.realizadopor" class="form-control" />
+      </div>
+      
+      <div class="form-group">
+        <label>Misión:</label>
+        <textarea [(ngModel)]="empresa.mision" rows="4" class="form-control"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Visión:</label>
+        <textarea [(ngModel)]="empresa.vision" rows="4" class="form-control"></textarea>
+      </div>
+    </div>
   </div>
 
-  <button (click)="guardarCambios()">Guardar Cambios</button>
+  <!-- Gestión de Banners -->
+  <div class="banners-section">
+    <h3>Banners</h3>
+    <button class="btn btn-primary" (click)="agregarBanner()">Agregar Banner</button>
+    
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>URL</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let banner of empresa?.banners; let i = index">
+          <td>
+            <div class="banner-preview" *ngIf="banner.url">
+              <img [src]="banner.url" alt="Banner" class="banner-img" />
+            </div>
+            <div class="no-image" *ngIf="!banner.url">
+              Sin imagen
+            </div>
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="banner.url" class="form-control-sm" placeholder="URL de la imagen" />
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="banner.descripcion" class="form-control-sm" placeholder="Descripción del banner" />
+          </td>
+          <td>
+            <select [(ngModel)]="banner.estaBanner" class="form-control-sm">
+              <option [value]="0">Inactivo</option>
+              <option [value]="1">Activo</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="quitarBanner(i)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón de guardar -->
+  <div class="actions-section">
+    <button class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
+  </div>
 </div>
 

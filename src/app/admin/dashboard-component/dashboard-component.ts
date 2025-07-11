@@ -4,11 +4,12 @@ import { TipoUsuario } from '../../modelos/TipoUsuario';
 import { UsuarioService } from '../../servicios/usuario-service';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-component',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './dashboard-component.html',
   styleUrls: ['./dashboard-component.css']
 })
