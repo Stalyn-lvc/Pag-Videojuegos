@@ -153,7 +153,7 @@ export class ContadorTokenComponent implements OnInit, OnDestroy {
 
   private createTenMinuteToken(): void {
     // Crear un token que expire en 10 minutos
-    const expirationTime = Math.floor(Date.now() / 1000) + 600; // 10 minutos = 600 segundos
+    const expirationTime = Math.floor(Date.now() / 1000) + 600;   
     
     // Obtener el token actual del localStorage
     const currentToken = localStorage.getItem('token');
@@ -178,7 +178,7 @@ export class ContadorTokenComponent implements OnInit, OnDestroy {
           localStorage.setItem('token', newToken);
           localStorage.setItem('exp', expirationTime.toString());
           
-          console.log('✅ Token de 10 minutos creado, expira en:', new Date(expirationTime * 10000));
+          console.log(' Token de 10 minutos creado, expira en:', new Date(expirationTime * 10000));
           
           // Iniciar el contador
           this.startTokenTimer();

@@ -1,101 +1,260 @@
-/* estilos.css */
+/* Contenedor general */
 .container {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 1rem;
-  font-family: Arial, sans-serif;
+  max-width: 1000px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-h2, h3 {
-  text-align: center;
-  color: #333;
-}
-
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: #f9f9f9;
-  padding: 1.5rem;
+/* Botón de crear usuario */
+.btn-primary {
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+  margin: 0 auto 18px auto;
+  display: block;
 }
 
-form input {
-  flex: 1 1 45%;
-  padding: 10px;
+.btn-primary:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
+}
+
+/* Tabla de usuarios */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto 24px auto;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(139,0,0,0.08);
+  border-radius: 12px;
+  overflow: hidden;
   font-size: 1rem;
-  border: 1px solid #ccc;
+}
+
+th {
+  background: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.08rem;
+  padding: 1rem 0.5rem;
+}
+
+td {
+  text-align: center;
+  vertical-align: middle;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 1.5px solid #f2eaea;
+}
+
+tr:nth-child(even) td {
+  background: #f9f3f3;
+}
+
+/* Badges para roles y estados */
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-admin {
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+}
+
+.badge-user {
+  background-color: #ffe066 !important;
+  color: #8b0000 !important;
+}
+
+.badge-active {
+  background-color: #28a745 !important;
+  color: #fff !important;
+}
+
+.badge-inactive {
+  background-color: #6c757d !important;
+  color: #fff !important;
+}
+
+/* Botones de acción */
+.btn-sm {
+  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem;
   border-radius: 4px;
 }
 
-form input[type="number"] {
-  max-width: 100px;
+.btn-warning {
+  background-color: #ffe066 !important;
+  color: #8b0000 !important;
+  font-weight: 700;
+  border-radius: 6px;
+  border: none;
+  margin-top: 10px;
+  transition: background 0.2s, color 0.2s;
 }
 
-form button {
-  padding: 10px 20px;
-  background-color: #007bff;
+.btn-warning:hover {
+  background-color: #fffbe6 !important;
+  color: #b71c1c !important;
+}
+
+.btn-danger {
+  background-color: #e74c3c !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 6px;
   border: none;
-  color: white;
-  border-radius: 5px;
+  margin-top: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+}
+
+/* Modal (CSS-only) */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  overflow-y: auto;
+}
+.modal.show {
+  display: block;
+}
+
+/* Modal Moderno */
+.modal-content {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgba(139,0,0,0.13);
+  padding: 2.2rem 2rem 1.5rem 2rem;
+  max-width: 520px;
+  margin: 5% auto;
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: #8b0000;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+
+.close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
+}
+
+form .form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+form .form-group label {
+  color: #8b0000;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+
+form input, form textarea, form select {
+  border: 1.5px solid #8b0000;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
   font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+form button[type="submit"] {
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+}
+
+form button[type="submit"]:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
 }
 
 form button[type="button"] {
-  background-color: #6c757d;
+  background-color: #6c757d !important;
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+}
+
+form button[type="button"]:hover {
+  background-color: #343a40 !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
 }
 
 form button:hover {
   opacity: 0.9;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+/* Errores de validación */
+.error {
+  color: #e74c3c;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  text-align: left;
 }
 
-li {
-  background-color: #f1f1f1;
-  margin: 0.5rem 0;
-  padding: 0.75rem;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-li button {
-  background-color: #28a745;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-li button:hover {
-  opacity: 0.85;
-}
-
-/* Responsivo para móviles */
-@media (max-width: 600px) {
-  form input {
-    flex: 1 1 100%;
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 96%;
+    margin: 10% auto;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
   }
-
-  form button {
-    width: 100%;
+  .table {
+    font-size: 0.95rem;
   }
-
-  li {
-    flex-direction: column;
-    align-items: flex-start;
+  th, td {
+    padding: 0.5rem 0.2rem;
   }
-
-  li button {
-    margin-top: 0.5rem;
+  
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
   }
 }

@@ -13,12 +13,25 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    return new HttpHeaders({
+    console.log('🔑 Token obtenido del localStorage:', !!token);
+    if (token) {
+      console.log('🔑 Token (primeros 50 caracteres):', token.substring(0, 50) + '...');
+    }
+    
+    const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
+    
+    console.log('🔑 Headers creados:', headers);
+    return headers;
   }
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.apiUrl, { headers: this.getAuthHeaders() });
+    const headers = this.getAuthHeaders();
+    console.log('🌐 URL del API usuarios:', this.apiUrl);
+    console.log('🔑 Headers de autorización:', headers);
+    
+    // Intentar primero con headers de autorización
+    return this.http.get<Usuario[]>(this.apiUrl, { headers });
   }
 
   getUsuarioById(id: number): Observable<Usuario> {
@@ -26,7 +39,11 @@ export class UsuarioService {
   }
 
   crearUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.apiUrl, usuario, { headers: this.getAuthHeaders() });
+    const headers = this.getAuthHeaders();
+    console.log('🌐 Creando usuario en URL:', this.apiUrl);
+    console.log('📤 Datos a enviar:', usuario);
+    console.log('🔑 Headers:', headers);
+    return this.http.post<Usuario>(this.apiUrl, usuario, { headers });
   }
 
   actualizarUsuario(usuario: Usuario): Observable<Usuario> {
