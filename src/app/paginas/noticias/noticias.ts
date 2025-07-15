@@ -3,11 +3,14 @@ import { Noticia } from '../../modelos/Noticias';
 import { NoticiaServicio } from '../../servicios/noticia-servicio';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { JuegoServicio } from '../../servicios/juego-servicio';
+import { Juego } from '../../modelos/Juego';
+import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqueda-barra';
 
 @Component({  
   selector: 'app-noticias',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BusquedaBarraComponent],
   templateUrl: './noticias.html',
   styleUrls: ['./noticias.css']  // corregí el nombre a plural styleUrls
 })
@@ -21,7 +24,20 @@ export class Noticias implements OnInit, OnDestroy {
   bannerIndex = 0;
   bannerInterval: any;
 
-  constructor(private noticiaService: NoticiaServicio) {}
+  // Filtros y autocompletado
+  tags: string[] = ['Trailer', 'DLC', 'Actualización', 'Lanzamiento', 'Evento', 'Anuncio'];
+  tagSeleccionado: string = '';
+  tituloBusqueda: string = '';
+  tituloSugerencias: string[] = [];
+  juegoBusqueda: string = '';
+  juegoSugerencias: string[] = [];
+  mostrarSugerenciasTitulo: boolean = false;
+  mostrarSugerenciasJuego: boolean = false;
+  // Para sugerencias combinadas
+  sugerenciasCombinadas: { tipo: 'titulo' | 'juego', valor: string }[] = [];
+  mostrarSugerenciasCombinadas: boolean = false;
+
+  constructor(private noticiaService: NoticiaServicio, private juegoService: JuegoServicio) {}
 
   ngOnInit(): void {
     this.noticiaService.getNoticias().subscribe(data => {
@@ -99,6 +115,150 @@ export class Noticias implements OnInit, OnDestroy {
     if (index >= 0 && index < this.totalPages) {
       this.currentPage = index;
       this.actualizarPaginacion();
+    }
+  }
+
+  // Reemplazar los métodos de filtro y autocompletado para que respondan a los eventos del componente hijo
+  onCambioCampo(event: {campo: string, valor: any}) {
+    (this as any)[event.campo] = event.valor;
+  }
+  onAutocompletar(event: {campo: string, valor: string}) {
+    if (event.campo === 'tituloBusqueda') this.obtenerSugerenciasTitulo({target: {value: event.valor}});
+    if (event.campo === 'juegoBusqueda') this.obtenerSugerenciasJuego({target: {value: event.valor}});
+  }
+  onSeleccionarSugerencia(event: {campo: string, valor: string}) {
+    (this as any)[event.campo] = event.valor;
+    if (event.campo === 'tituloBusqueda') this.buscarPorTitulo();
+    if (event.campo === 'juegoBusqueda') this.buscarPorJuego();
+  }
+
+  onAutocompletarBarra(event: {tipo: string, texto: string}) {
+    if (event.tipo === 'combinado') {
+      this.obtenerSugerenciasTitulo({target: {value: event.texto}});
+      this.obtenerSugerenciasJuego({target: {value: event.texto}});
+      // Combinar sugerencias después de un pequeño delay para esperar ambas respuestas
+      setTimeout(() => {
+        this.sugerenciasCombinadas = [
+          ...this.tituloSugerencias.map(t => ({ tipo: 'titulo' as const, valor: t })),
+          ...this.juegoSugerencias.map(j => ({ tipo: 'juego' as const, valor: j }))
+        ];
+        this.mostrarSugerenciasCombinadas = this.sugerenciasCombinadas.length > 0;
+      }, 200);
+    } else {
+      if (event.tipo === 'titulo') this.obtenerSugerenciasTitulo({target: {value: event.texto}});
+      if (event.tipo === 'juego') this.obtenerSugerenciasJuego({target: {value: event.texto}});
+    }
+  }
+  onSeleccionarSugerenciaBarra(event: {tipo: string, valor: string}) {
+    if (event.tipo === 'titulo') {
+      this.tituloBusqueda = event.valor;
+      this.buscarPorTitulo();
+    }
+    if (event.tipo === 'juego') {
+      this.juegoBusqueda = event.valor;
+      this.buscarPorJuego();
+    }
+  }
+
+  limpiarFiltros() {
+    this.tagSeleccionado = '';
+    this.tituloBusqueda = '';
+    this.juegoBusqueda = '';
+    this.tituloSugerencias = [];
+    this.juegoSugerencias = [];
+    this.mostrarSugerenciasTitulo = false;
+    this.mostrarSugerenciasJuego = false;
+    this.cargarNoticias();
+  }
+
+  // Método para buscar combinando filtros (igual que antes)
+  buscarNoticiasFiltradas() {
+    if (this.tagSeleccionado) {
+      this.noticiaService.buscarPorTag(this.tagSeleccionado).subscribe(noticias => {
+        this.noticias = noticias;
+        this.actualizarPaginacion();
+      });
+    } else if (this.tituloBusqueda) {
+      this.buscarPorTitulo();
+    } else if (this.juegoBusqueda) {
+      this.buscarPorJuego();
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  // Método para autocompletar título de noticia
+  obtenerSugerenciasTitulo(event: any) {
+    const texto = event.target.value;
+    this.tituloBusqueda = texto;
+    if (texto.length > 1) {
+      this.noticiaService.sugerenciasTitulo(texto).subscribe(noticias => {
+        this.tituloSugerencias = noticias.map(n => n.titulo);
+        this.mostrarSugerenciasTitulo = true;
+      });
+    } else {
+      this.tituloSugerencias = [];
+      this.mostrarSugerenciasTitulo = false;
+    }
+  }
+
+  // Método para autocompletar nombre de juego en noticias
+  obtenerSugerenciasJuego(event: any) {
+    const texto = event.target.value;
+    this.juegoBusqueda = texto;
+    if (texto.length > 1) {
+      this.juegoService.sugerenciasNombre(texto).subscribe((juegos: Juego[]) => {
+        this.juegoSugerencias = juegos.map((j: Juego) => j.nombre);
+        this.mostrarSugerenciasJuego = true;
+      });
+    } else {
+      this.juegoSugerencias = [];
+      this.mostrarSugerenciasJuego = false;
+    }
+  }
+
+  // Método para buscar por título exacto
+  buscarPorTitulo() {
+    if (this.tituloBusqueda) {
+      this.noticiaService.buscarPorTitulo(this.tituloBusqueda).subscribe(noticias => {
+        this.noticias = noticias;
+        this.actualizarPaginacion();
+      });
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  // Método para buscar por nombre de juego exacto
+  buscarPorJuego() {
+    if (this.juegoBusqueda) {
+      this.noticiaService.buscarPorJuego(this.juegoBusqueda).subscribe(noticias => {
+        this.noticias = noticias;
+        this.actualizarPaginacion();
+      });
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  onBusquedaBarra(event: {tipo: string, texto: string, opcion: string|null}) {
+    switch (event.tipo) {
+      case 'titulo':
+        this.tituloBusqueda = event.texto;
+        this.buscarPorTitulo();
+        break;
+      case 'juego':
+        this.juegoBusqueda = event.texto;
+        this.buscarPorJuego();
+        break;
+      case 'tag':
+        if (event.opcion) {
+          this.tagSeleccionado = event.opcion;
+          this.buscarNoticiasFiltradas();
+        }
+        break;
+      default:
+        this.limpiarFiltros();
     }
   }
 }

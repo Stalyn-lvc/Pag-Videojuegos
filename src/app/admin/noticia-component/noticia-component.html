@@ -1,5 +1,56 @@
 <button class="btn btn-primary my-2" (click)="abrirModal()">Crear Nueva Noticia</button>
 
+<app-busqueda-barra
+  [tipo]="'noticias'"
+  [tags]="tags"
+  [tituloSugerencias]="tituloSugerencias"
+  [mostrarSugerenciasTitulo]="mostrarSugerenciasTitulo"
+  [juegoSugerencias]="juegoSugerencias"
+  [mostrarSugerenciasJuego]="mostrarSugerenciasJuego"
+  (buscar)="onBusquedaBarra($event)"
+  (limpiar)="limpiarFiltros()"
+  (autocompletar)="onAutocompletarBarra($event)"
+  (seleccionarSugerencia)="onSeleccionarSugerenciaBarra($event)">
+</app-busqueda-barra>
+
+<div class="filtros-noticias mb-3">
+  <div class="row g-2 align-items-center">
+    <!-- Filtro por Tag -->
+    <div class="col-auto">
+      <label for="tagSelect" class="form-label mb-0">Tag:</label>
+      <select id="tagSelect" class="form-select" [(ngModel)]="tagSeleccionado" (change)="buscarPorTag()" [ngModelOptions]="{standalone: true}">
+        <option value="">Todos</option>
+        <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
+      </select>
+    </div>
+    <!-- Filtro por Título (autocompletado) -->
+    <div class="col-auto position-relative">
+      <label for="tituloInput" class="form-label mb-0">Título:</label>
+      <input id="tituloInput" type="text" class="form-control" [(ngModel)]="tituloBusqueda" (input)="obtenerSugerenciasTitulo($event)" (blur)="mostrarSugerenciasTitulo=false" (focus)="obtenerSugerenciasTitulo($event)" [ngModelOptions]="{standalone: true}" placeholder="Buscar título...">
+      <ul *ngIf="mostrarSugerenciasTitulo && tituloSugerencias.length" class="list-group position-absolute w-100" style="z-index:10;">
+        <li *ngFor="let sugerencia of tituloSugerencias" class="list-group-item list-group-item-action" (mousedown)="seleccionarSugerenciaTitulo(sugerencia)">{{ sugerencia }}</li>
+      </ul>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" (click)="buscarPorTitulo()">Buscar por título</button>
+    </div>
+    <!-- Filtro por Nombre de Juego (autocompletado) -->
+    <div class="col-auto position-relative">
+      <label for="juegoInput" class="form-label mb-0">Juego:</label>
+      <input id="juegoInput" type="text" class="form-control" [(ngModel)]="juegoBusqueda" (input)="obtenerSugerenciasJuego($event)" (blur)="mostrarSugerenciasJuego=false" (focus)="obtenerSugerenciasJuego($event)" [ngModelOptions]="{standalone: true}" placeholder="Buscar juego...">
+      <ul *ngIf="mostrarSugerenciasJuego && juegoSugerencias.length" class="list-group position-absolute w-100" style="z-index:10;">
+        <li *ngFor="let sugerencia of juegoSugerencias" class="list-group-item list-group-item-action" (mousedown)="seleccionarSugerenciaJuego(sugerencia)">{{ sugerencia }}</li>
+      </ul>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" (click)="buscarPorJuego()">Buscar por juego</button>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-secondary" (click)="tagSeleccionado=''; tituloBusqueda=''; juegoBusqueda=''; cargarNoticias();">Limpiar filtros</button>
+    </div>
+  </div>
+</div>
+
 <table class="table table-bordered table-striped">
   <thead>
     <tr>

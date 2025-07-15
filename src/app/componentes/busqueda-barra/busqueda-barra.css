@@ -1,0 +1,289 @@
+/* Estilos modernos mejorados para la barra de búsqueda */
+
+.busqueda-barra {
+  background: linear-gradient(135deg, #800000 0%, #a00000 50%, #800000 100%);
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 
+    0 15px 40px rgba(128, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 30px rgba(128, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+  backdrop-filter: blur(20px);
+}
+
+.busqueda-barra::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+}
+
+.busqueda-barra::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: shine 4s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Contenedores principales */
+.busqueda-nombre-row, .busqueda-filtros-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.busqueda-filtros-row {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Labels mejorados */
+.busqueda-nombre-row label, .busqueda-filtros-row label {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  min-width: fit-content;
+  letter-spacing: 0.5px;
+}
+
+/* Inputs y selects modernos */
+.busqueda-nombre-row .form-control, .busqueda-filtros-row .form-select {
+  background: rgba(255, 255, 255, 0.98);
+  color: #800000;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+  padding: 14px 18px;
+  min-height: 48px;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(15px);
+}
+
+.busqueda-nombre-row .form-control:focus, .busqueda-filtros-row .form-select:focus {
+  border-color: #ffffff;
+  outline: none;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 0 0 4px rgba(255, 255, 255, 0.25),
+    0 12px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.busqueda-nombre-row .form-control::placeholder {
+  color: rgba(128, 0, 0, 0.5);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Botones modernos mejorados */
+.busqueda-nombre-row .btn, .busqueda-filtros-row .btn {
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 14px 24px;
+  min-width: 120px;
+  min-height: 48px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.busqueda-nombre-row .btn::before, .busqueda-filtros-row .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.6s ease;
+}
+
+.busqueda-nombre-row .btn:hover::before, .busqueda-filtros-row .btn:hover::before {
+  left: 100%;
+}
+
+/* Estilos específicos para botones */
+.btn-outline-primary {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border: 2px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-outline-primary:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.btn-outline-primary:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+  border: 2px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.35) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.btn-secondary:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Lista de sugerencias moderna */
+.list-group {
+  max-height: 250px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.99);
+  color: #800000;
+  border: none;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+  backdrop-filter: blur(15px);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.list-group-item {
+  background: transparent;
+  color: #800000;
+  cursor: pointer;
+  padding: 14px 18px;
+  border: none;
+  border-bottom: 1px solid rgba(128, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item:hover {
+  background: linear-gradient(135deg, rgba(128, 0, 0, 0.12), rgba(160, 0, 0, 0.08));
+  color: #800000;
+  transform: translateX(6px);
+  font-weight: 600;
+}
+
+.list-group-item span {
+  font-size: 1.2rem;
+}
+
+/* Placeholder mejorado */
+.placeholder-option {
+  color: rgba(128, 0, 0, 0.5) !important;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Scrollbar personalizada moderna */
+.list-group::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list-group::-webkit-scrollbar-track {
+  background: rgba(128, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+.list-group::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(128, 0, 0, 0.3), rgba(128, 0, 0, 0.5));
+  border-radius: 12px;
+}
+
+.list-group::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(128, 0, 0, 0.5), rgba(128, 0, 0, 0.7));
+}
+
+@media (max-width: 480px) {
+  .busqueda-barra {
+    padding: 16px;
+    margin: 8px;
+  }
+  
+  .busqueda-nombre-row .form-control, .busqueda-filtros-row .form-select {
+    font-size: 0.9rem;
+    padding: 12px 16px;
+  }
+  
+  .busqueda-nombre-row .btn, .busqueda-filtros-row .btn {
+    font-size: 0.85rem;
+    padding: 12px 16px;
+  }
+}

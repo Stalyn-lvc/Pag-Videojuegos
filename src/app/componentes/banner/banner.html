@@ -1,6 +1,5 @@
-<div *ngIf="empresa?.banners?.[slideIndex] as banner">
+<div *ngIf="bannersActivos[slideIndex] as banner">
   <div class="banner-contenedor moderno">
     <img [src]="getImagenUrl(banner.url)" alt="Banner" class="banner-img" />
-    
   </div>
 </div>

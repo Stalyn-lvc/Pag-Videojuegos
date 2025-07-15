@@ -5,20 +5,11 @@
 
    <div *ngIf="currentNoticia && currentNoticia.noticiaImagens && currentNoticia.noticiaImagens.length > 0"
      class="banner-container">
-      <img
-        [src]="currentNoticia.noticiaImagens[bannerIndex].url"
-        alt="Imagen banner"
-        class="banner-img"
-      />
+      <img [src]="currentNoticia.noticiaImagens[bannerIndex].url" alt="Imagen banner" class="banner-img" />
 
       <div class="miniaturas">
-        <img
-          *ngFor="let img of currentNoticia.noticiaImagens; let i = index"
-          [src]="img.url"
-          [class.active]="i === bannerIndex"
-          (click)="bannerIndex = i"
-          alt="Miniatura"
-        />
+        <img *ngFor="let img of currentNoticia.noticiaImagens; let i = index" [src]="img.url"
+          [class.active]="i === bannerIndex" (click)="bannerIndex = i" alt="Miniatura" />
       </div>
     </div>
 
@@ -26,9 +17,14 @@
   </div>
 </ng-container>
 
-
 <!-- Listado -->
 <ng-template #listadoNoticias>
+  <app-busqueda-barra [tipo]="'noticias'" [tags]="tags"
+    [sugerenciasCombinadasInput]="sugerenciasCombinadas"
+    (buscar)="onBusquedaBarra($event)" (limpiar)="limpiarFiltros()"
+    (autocompletar)="onAutocompletarBarra($event)" (seleccionarSugerencia)="onSeleccionarSugerenciaBarra($event)">
+  </app-busqueda-barra>
+
   <div *ngIf="noticiasPaginadas.length > 0; else noNoticias" class="grid-noticias">
     <div *ngFor="let noticia of noticiasPaginadas.slice(0, 4)" class="noticia-card">
       <div class="imagen-container">

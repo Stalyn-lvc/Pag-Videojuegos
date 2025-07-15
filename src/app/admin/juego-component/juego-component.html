@@ -2,6 +2,19 @@
   <h2>Administrar Juegos</h2>
   <button class="btn btn-primary my-2" (click)="abrirModal()">Crear Nuevo Juego</button>
 
+  <app-busqueda-barra
+    [tipo]="'juegos'"
+    [generos]="generos"
+    [rangosPrecio]="rangosPrecio"
+    [rangosRanking]="rangosRanking"
+    [nombreSugerencias]="nombreSugerencias"
+    [mostrarSugerenciasNombre]="mostrarSugerenciasNombre"
+    (buscar)="onBusquedaBarra($event)"
+    (limpiar)="limpiarFiltros()"
+    (autocompletar)="onAutocompletar($event)"
+    (seleccionarSugerencia)="onSeleccionarSugerencia($event)">
+  </app-busqueda-barra>
+
   <table class="table table-bordered table-striped">
     <thead>
       <tr>

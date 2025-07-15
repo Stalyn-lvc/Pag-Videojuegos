@@ -6,20 +6,13 @@
     <p><strong>Precio:</strong> {{ currentJuego.precio | currency:'USD' }}</p>
     <p><strong>Ranquin:</strong> {{ currentJuego.ranquin }}</p>
 
-    <div *ngIf="currentJuego && currentJuego.juegoImagens && currentJuego.juegoImagens.length > 0" class="banner-container">
-      <img
-        [src]="getImagenUrl(currentJuego.juegoImagens[bannerIndex].url)"
-        alt="Imagen banner"
-        class="banner-img"
-      />
+    <div *ngIf="currentJuego && currentJuego.juegoImagens && currentJuego.juegoImagens.length > 0"
+      class="banner-container">
+      <img [src]="getImagenUrl(currentJuego.juegoImagens[bannerIndex].url)" alt="Imagen banner" class="banner-img" />
       <div class="miniaturas">
         <ng-container *ngFor="let img of currentJuego.juegoImagens; let i = index">
-          <img
-            [src]="getImagenUrl(img.url)"
-            (click)="bannerIndex = i"
-            [class.active]="i === bannerIndex"
-            alt="Miniatura"
-          />
+          <img [src]="getImagenUrl(img.url)" (click)="bannerIndex = i" [class.active]="i === bannerIndex"
+            alt="Miniatura" />
         </ng-container>
       </div>
     </div>
@@ -33,6 +26,12 @@
 
 <!-- Listado de juegos -->
 <ng-template #listadoJuegos>
+  <app-busqueda-barra [tipo]="'juegos'" [generos]="generos" [rangosPrecio]="rangosPrecio"
+    [rangosRanking]="rangosRanking" [nombreSugerencias]="nombreSugerencias"
+    [mostrarSugerenciasNombre]="mostrarSugerenciasNombre" (buscar)="onBusquedaBarra($event)"
+    (limpiar)="limpiarFiltros()" (autocompletar)="onAutocompletarBarra($event)"
+    (seleccionarSugerencia)="onSeleccionarSugerenciaBarra($event)">
+  </app-busqueda-barra>
   <div *ngIf="juegosPaginados.length > 0; else noJuegos" class="grid-juegos">
     <div *ngFor="let juego of juegosPaginados" class="juego-card">
       <div class="imagen-container">

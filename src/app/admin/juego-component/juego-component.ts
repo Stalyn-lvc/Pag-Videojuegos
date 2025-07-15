@@ -4,11 +4,12 @@ import { JuegoServicio } from '../../servicios/juego-servicio';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, SlicePipe, CurrencyPipe } from '@angular/common';
+import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqueda-barra';
 
 @Component({
   selector: 'app-juego-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlicePipe, CurrencyPipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlicePipe, CurrencyPipe, BusquedaBarraComponent],
   templateUrl: './juego-component.html',
   styleUrls: ['./juego-component.css']
 })
@@ -21,6 +22,30 @@ export class JuegoComponent implements OnInit {
   nuevaUrl: string = '';
   sliderIndices: { [key: number]: number } = {};
   juegoEditando: Juego | null = null;
+
+  // Filtros y autocompletado (igual que en juegos.ts)
+  generos: string[] = ['Acción', 'RPG', 'Sandbox', 'Deportes', 'Aventura', 'Battle Royale', 'Estrategia', 'Simulación', 'Puzzle', 'Horro'];
+  generoSeleccionado: string = '';
+  rangosPrecio = [
+    { label: 'Todos', min: null, max: null },
+    { label: 'Gratuito', min: 0, max: 0 },
+    { label: 'Económico', min: 0.01, max: 25 },
+    { label: 'Moderado', min: 25.01, max: 45 },
+    { label: 'Premium', min: 45.01, max: 65 },
+    { label: 'Deluxe', min: 65.01, max: null }
+  ];
+  rangoPrecioSeleccionado = this.rangosPrecio[0];
+  rangosRanking = [
+    { label: 'Todos', min: null, max: null },
+    { label: 'Básico', min: 3.0, max: 3.5 },
+    { label: 'Bueno', min: 3.6, max: 4.0 },
+    { label: 'Muy Bueno', min: 4.1, max: 4.5 },
+    { label: 'Excelente', min: 4.6, max: 5.0 }
+  ];
+  rangoRankingSeleccionado = this.rangosRanking[0];
+  nombreBusqueda: string = '';
+  nombreSugerencias: string[] = [];
+  mostrarSugerenciasNombre: boolean = false;
 
   constructor(
     private juegoServicio: JuegoServicio,
@@ -151,5 +176,121 @@ export class JuegoComponent implements OnInit {
     if (idx < 0) idx = 0;
     if (idx > max) idx = max;
     juego.sliderIndex = idx;
+  }
+
+  buscarPorGenero() {
+    if (this.generoSeleccionado) {
+      this.juegoServicio.buscarPorGenero(this.generoSeleccionado).subscribe(juegos => {
+        this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+      });
+    } else {
+      this.cargarJuegos();
+    }
+  }
+
+  buscarPorPrecio() {
+    const { min, max } = this.rangoPrecioSeleccionado;
+    if (min !== null && max !== null) {
+      this.juegoServicio.buscarPorPrecio(min, max).subscribe(juegos => {
+        this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+      });
+    } else {
+      this.cargarJuegos();
+    }
+  }
+
+  buscarPorRanking() {
+    const { min, max } = this.rangoRankingSeleccionado;
+    if (min !== null && max !== null) {
+      this.juegoServicio.buscarPorRanking(min, max).subscribe(juegos => {
+        this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+      });
+    } else {
+      this.cargarJuegos();
+    }
+  }
+
+  buscarPorNombre() {
+    if (this.nombreBusqueda) {
+      this.juegoServicio.buscarPorNombre(this.nombreBusqueda).subscribe(juegos => {
+        this.juegos = juegos.map(j => ({ ...j, sliderIndex: 0 }));
+      });
+    } else {
+      this.cargarJuegos();
+    }
+  }
+
+  // Sugerencias de nombre (autocompletado)
+  obtenerSugerenciasNombre(event: any) {
+    const texto = event.target.value;
+    this.nombreBusqueda = texto;
+    if (texto.length > 1) {
+      this.juegoServicio.sugerenciasNombre(texto).subscribe(juegos => {
+        this.nombreSugerencias = juegos.map((j: Juego) => j.nombre);
+        this.mostrarSugerenciasNombre = true;
+      });
+    } else {
+      this.nombreSugerencias = [];
+      this.mostrarSugerenciasNombre = false;
+    }
+  }
+
+  seleccionarSugerenciaNombre(nombre: string) {
+    this.nombreBusqueda = nombre;
+    this.mostrarSugerenciasNombre = false;
+    this.buscarPorNombre();
+  }
+
+  limpiarFiltros() {
+    this.generoSeleccionado = '';
+    this.rangoPrecioSeleccionado = this.rangosPrecio[0];
+    this.rangoRankingSeleccionado = this.rangosRanking[0];
+    this.nombreBusqueda = '';
+    this.nombreSugerencias = [];
+    this.mostrarSugerenciasNombre = false;
+    this.cargarJuegos();
+  }
+
+  onBusquedaBarra(event: {tipo: string, texto: string, opcion: string|null}) {
+    switch (event.tipo) {
+      case 'nombre':
+        this.nombreBusqueda = event.texto;
+        this.buscarPorNombre();
+        break;
+      case 'genero':
+        if (event.opcion) {
+          this.generoSeleccionado = event.opcion;
+          this.buscarPorGenero();
+        }
+        break;
+      case 'precio':
+        if (event.opcion) {
+          this.rangoPrecioSeleccionado = typeof event.opcion === 'string'
+            ? this.rangosPrecio.find(r => r.label === event.opcion) || this.rangosPrecio[0]
+            : event.opcion;
+          this.buscarPorPrecio();
+        }
+        break;
+      case 'ranquin':
+        if (event.opcion) {
+          this.rangoRankingSeleccionado = typeof event.opcion === 'string'
+            ? this.rangosRanking.find(r => r.label === event.opcion) || this.rangosRanking[0]
+            : event.opcion;
+          this.buscarPorRanking();
+        }
+        break;
+      default:
+        this.limpiarFiltros();
+    }
+  }
+
+  onAutocompletar(event: {tipo: string, texto: string}) {
+    if (event.tipo === 'nombre') this.obtenerSugerenciasNombre({target: {value: event.texto}});
+  }
+  onSeleccionarSugerencia(event: {tipo: string, valor: string}) {
+    if (event.tipo === 'nombre') {
+      this.nombreBusqueda = event.valor;
+      this.buscarPorNombre();
+    }
   }
 } 

@@ -15,6 +15,10 @@ export class Banner {
     intervalId: any;
     public environment = environment;
 
+    get bannersActivos() {
+      return this.empresa?.banners?.filter(b => b.estaBanner === 1) || [];
+    }
+
     getImagenUrl(url: string): string {
       // Si la URL ya es completa (empieza con http), la devuelve tal como está
       if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
@@ -34,8 +38,8 @@ export class Banner {
 
     startSlider(): void {
       this.intervalId = setInterval(() => {
-        if (this.empresa?.banners?.length) {
-          this.slideIndex = (this.slideIndex + 1) % this.empresa.banners.length;
+        if (this.bannersActivos.length) {
+          this.slideIndex = (this.slideIndex + 1) % this.bannersActivos.length;
         }
       }, 3000);
     }

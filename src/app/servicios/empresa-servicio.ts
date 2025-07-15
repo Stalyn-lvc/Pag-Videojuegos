@@ -17,4 +17,7 @@ export class EmpresaServicio {
   updateEmpresa(data: Empresa): Observable<Empresa> {
     return this.http.put<Empresa>(`${this.urlApiEmpresa}/${data.secuencial}`, data);
   }
+  getEmpresaAdmin(): Observable<Empresa> {
+    return this.http.get<Empresa>(`${this.urlApiEmpresa}/admin`);
+  }
 }

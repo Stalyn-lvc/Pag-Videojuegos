@@ -29,4 +29,29 @@ export class JuegoServicio {
     eliminarJuego(id: number): Observable<any> {
         return this.http.delete(`${this.apiUrl}/${id}`);
     }
+
+    // Sugerencias de juegos por nombre (autocompletado)
+    sugerenciasNombre(nombre: string): Observable<Juego[]> {
+        return this.http.get<Juego[]>(`${this.apiUrl}/sugerencias`, { params: { nombre } });
+    }
+
+    // Buscar juegos por género
+    buscarPorGenero(genero: string): Observable<Juego[]> {
+        return this.http.get<Juego[]>(`${this.apiUrl}/buscar`, { params: { genero } });
+    }
+
+    // Buscar juegos por rango de precio
+    buscarPorPrecio(min: number, max: number): Observable<Juego[]> {
+        return this.http.get<Juego[]>(`${this.apiUrl}/buscar/precio`, { params: { min: min.toString(), max: max.toString() } });
+    }
+
+    // Buscar juegos por rango de ranking
+    buscarPorRanking(min: number, max: number): Observable<Juego[]> {
+        return this.http.get<Juego[]>(`${this.apiUrl}/buscar/ranquin`, { params: { min: min.toString(), max: max.toString() } });
+    }
+
+    // Buscar juegos por nombre exacto
+    buscarPorNombre(nombre: string): Observable<Juego[]> {
+        return this.http.get<Juego[]>(`${this.apiUrl}/buscar/juego`, { params: { nombre } });
+    }
 } 

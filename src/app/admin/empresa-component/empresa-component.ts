@@ -61,19 +61,33 @@ export class EmpresaComponent implements OnInit {
 
   // Guardar cambios a la empresa
   guardarCambios(): void {
+    // Asegura que el campo estaBanner sea numérico (1 o 0)
+    this.empresa.banners = (this.empresa.banners || []).map(b => ({
+      ...b,
+      estaBanner: typeof b.estaBanner === 'string'
+        ? (b.estaBanner === 'Activo' ? 1 : 0)
+        : b.estaBanner
+    }));
+
+    // Log para verificar los banners antes de enviar
+    console.log('Banners a guardar:', this.empresa.banners);
+
     const empresaLimpia: Empresa = {
       ...this.empresa,
-          banners: this.empresa.banners?.map(b => ({
+      banners: (this.empresa.banners || []).map(b => ({
         ...b,
         empresa: undefined as unknown as Empresa  // forzamos el tipo
-      })) || []
+      }))
     };
     console.log(empresaLimpia)
     this.empresaService.updateEmpresa(empresaLimpia).subscribe({
       next: (resp) => {
         console.log('Empresa actualizada:', resp);
         alert('Datos guardados con éxito');
-        localStorage.setItem('empresa', JSON.stringify(resp));
+        // Refresca la empresa desde el backend para mostrar los datos actualizados
+        this.empresaService.getEmpresaAdmin().subscribe(data => {
+          this.empresa = data;
+        });
       },
       error: (err) => {
         console.error('Error al guardar:', err);

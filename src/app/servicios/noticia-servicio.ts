@@ -34,4 +34,24 @@ export class NoticiaServicio {
   eliminarNoticia(id: number): Observable<any> {
     return this.http.delete(`${this.urlApi}/${id}`);
   }
+
+  // Buscar noticias por tag
+  buscarPorTag(tag: string): Observable<Noticia[]> {
+    return this.http.get<Noticia[]>(`${this.urlApi}/buscar/tag`, { params: { tag } });
+  }
+
+  // Buscar noticias por título exacto
+  buscarPorTitulo(titulo: string): Observable<Noticia[]> {
+    return this.http.get<Noticia[]>(`${this.urlApi}/buscar/titulo`, { params: { titulo } });
+  }
+
+  // Buscar noticias por nombre de juego relacionado
+  buscarPorJuego(nombre: string): Observable<Noticia[]> {
+    return this.http.get<Noticia[]>(`${this.urlApi}/buscar/juego`, { params: { nombre } });
+  }
+
+  // Sugerencias de títulos de noticias (autocompletado)
+  sugerenciasTitulo(titulo: string): Observable<Noticia[]> {
+    return this.http.get<Noticia[]>(`${this.urlApi}/sugerencias`, { params: { titulo } });
+  }
 }

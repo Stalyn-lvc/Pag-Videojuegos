@@ -5,13 +5,16 @@ import { CommonModule } from '@angular/common';
 import { NoticiaServicio } from '../../servicios/noticia-servicio';
 import { environment } from '../../../environment';
 import * as bootstrap from 'bootstrap';
+import { JuegoServicio } from '../../servicios/juego-servicio';
+import { Juego } from '../../modelos/Juego';
+import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqueda-barra';
 
 @Component({
   standalone: true,
   selector: 'app-noticia-component',
   templateUrl: './noticia-component.html',
   styleUrls: ['./noticia-component.css'],
-  imports: [CommonModule, FormsModule,ReactiveFormsModule],
+  imports: [CommonModule, FormsModule,ReactiveFormsModule, BusquedaBarraComponent],
   
 })
 export class NoticiaComponent implements OnInit {
@@ -26,7 +29,17 @@ export class NoticiaComponent implements OnInit {
 
   modalVisible = false;
 
-  constructor(private fb: FormBuilder, private noticiaService: NoticiaServicio) {}
+  // Filtros y autocompletado
+  tags: string[] = ['Trailer', 'DLC', 'Actualización', 'Lanzamiento', 'Evento', 'Anuncio'];
+  tagSeleccionado: string = '';
+  tituloBusqueda: string = '';
+  tituloSugerencias: string[] = [];
+  juegoBusqueda: string = '';
+  juegoSugerencias: string[] = [];
+  mostrarSugerenciasTitulo: boolean = false;
+  mostrarSugerenciasJuego: boolean = false;
+
+  constructor(private fb: FormBuilder, private noticiaService: NoticiaServicio, private juegoService: JuegoServicio) {}
 
   ngOnInit(): void {
     console.log('🚀 NoticiaComponent inicializado');
@@ -211,5 +224,136 @@ export class NoticiaComponent implements OnInit {
 
   eliminarNoticia(id: number) {
     this.noticiaService.eliminarNoticia(id).subscribe(() => this.cargarNoticias());
+  }
+
+  buscarPorTag() {
+    if (this.tagSeleccionado) {
+      this.noticiaService.buscarPorTag(this.tagSeleccionado).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  buscarPorTitulo() {
+    if (this.tituloBusqueda) {
+      this.noticiaService.buscarPorTitulo(this.tituloBusqueda).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  buscarPorJuego() {
+    if (this.juegoBusqueda) {
+      this.noticiaService.buscarPorJuego(this.juegoBusqueda).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  // Sugerencias de título (autocompletado)
+  obtenerSugerenciasTitulo(event: any) {
+    const texto = event.target.value;
+    this.tituloBusqueda = texto;
+    if (texto.length > 1) {
+      this.noticiaService.sugerenciasTitulo(texto).subscribe(noticias => {
+        this.tituloSugerencias = noticias.map(n => n.titulo);
+        this.mostrarSugerenciasTitulo = true;
+      });
+    } else {
+      this.tituloSugerencias = [];
+      this.mostrarSugerenciasTitulo = false;
+    }
+  }
+
+  seleccionarSugerenciaTitulo(titulo: string) {
+    this.tituloBusqueda = titulo;
+    this.mostrarSugerenciasTitulo = false;
+    this.buscarPorTitulo();
+  }
+
+  // Sugerencias de nombre de juego (autocompletado)
+  obtenerSugerenciasJuego(event: any) {
+    const texto = event.target.value;
+    this.juegoBusqueda = texto;
+    if (texto.length > 1) {
+      this.juegoService.sugerenciasNombre(texto).subscribe((juegos: Juego[]) => {
+        this.juegoSugerencias = juegos.map((j: Juego) => j.nombre);
+        this.mostrarSugerenciasJuego = true;
+      });
+    } else {
+      this.juegoSugerencias = [];
+      this.mostrarSugerenciasJuego = false;
+    }
+  }
+
+  seleccionarSugerenciaJuego(nombre: string) {
+    this.juegoBusqueda = nombre;
+    this.mostrarSugerenciasJuego = false;
+    this.buscarPorJuego();
+  }
+
+  // Buscar combinando filtros (opcional, para búsquedas avanzadas)
+  buscarNoticiasFiltradas() {
+    if (this.tagSeleccionado) {
+      this.buscarPorTag();
+    } else if (this.tituloBusqueda) {
+      this.buscarPorTitulo();
+    } else if (this.juegoBusqueda) {
+      this.buscarPorJuego();
+    } else {
+      this.cargarNoticias();
+    }
+  }
+
+  onBusquedaBarra(event: {tipo: string, texto: string, opcion: string|null}) {
+    switch (event.tipo) {
+      case 'titulo':
+        this.tituloBusqueda = event.texto;
+        this.buscarPorTitulo();
+        break;
+      case 'juego':
+        this.juegoBusqueda = event.texto;
+        this.buscarPorJuego();
+        break;
+      case 'tag':
+        if (event.opcion) {
+          this.tagSeleccionado = event.opcion;
+          this.buscarPorTag();
+        }
+        break;
+      default:
+        this.limpiarFiltros();
+    }
+  }
+  onAutocompletarBarra(event: {tipo: string, texto: string}) {
+    if (event.tipo === 'titulo') this.obtenerSugerenciasTitulo({target: {value: event.texto}});
+    if (event.tipo === 'juego') this.obtenerSugerenciasJuego({target: {value: event.texto}});
+  }
+  onSeleccionarSugerenciaBarra(event: {tipo: string, valor: string}) {
+    if (event.tipo === 'titulo') {
+      this.tituloBusqueda = event.valor;
+      this.buscarPorTitulo();
+    }
+    if (event.tipo === 'juego') {
+      this.juegoBusqueda = event.valor;
+      this.buscarPorJuego();
+    }
+  }
+
+  limpiarFiltros() {
+    this.tagSeleccionado = '';
+    this.tituloBusqueda = '';
+    this.juegoBusqueda = '';
+    this.tituloSugerencias = [];
+    this.juegoSugerencias = [];
+    this.mostrarSugerenciasTitulo = false;
+    this.mostrarSugerenciasJuego = false;
+    this.cargarNoticias();
   }
 }
