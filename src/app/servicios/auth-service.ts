@@ -38,8 +38,10 @@ export class AuthService {
               console.log('Expiración del servidor guardada:', res.exp);
             }
             
-            localStorage.setItem('tipoUsuario', payload.tipoUsuario);
-            this.tipoUsuario$.next(payload.tipoUsuario);
+            // Guardar el tipo de usuario en minúsculas para evitar problemas de comparación
+            const tipoUsuario = payload.tipoUsuario ? payload.tipoUsuario.toLowerCase() : '';
+            localStorage.setItem('tipoUsuario', tipoUsuario);
+            this.tipoUsuario$.next(tipoUsuario);
             this.loggedIn$.next(true); 
             observer.next(res);
             observer.complete();

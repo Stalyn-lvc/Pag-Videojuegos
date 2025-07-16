@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "web6_PAGINA": {
+    "GameVortex": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "web6_PAGINA:build:production"
+              "buildTarget": "GameVortex:build:production"
             },
             "development": {
-              "buildTarget": "web6_PAGINA:build:development"
+              "buildTarget": "GameVortex:build:development"
             }
           },
           "defaultConfiguration": "development"

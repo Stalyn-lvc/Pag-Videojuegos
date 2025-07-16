@@ -11,9 +11,9 @@ import { NoticiaComponent } from './admin/noticia-component/noticia-component';
 import { UsuarioComponent } from './admin/usuario-component/usuario-component';
 import { JuegosComponent } from './paginas/juegos/juegos';
 import { JuegoComponent } from './admin/juego-component/juego-component';
-import { DashboardComponent as UserDashboardComponent } from './user/dashboard-component/dashboard-component';
-import { JuegoComponent as UserJuegoComponent } from './user/juego-component/juego-component';
-import { NoticiaComponent as UserNoticiaComponent } from './user/noticia-component/noticia-component';
+import { DashboardComponent as UserDashboardComponent } from './user/user-dashboard-component/user-dashboard-component';
+import { JuegoComponent as UserJuegoComponent } from './user/user-juego-component/juego-component';
+import { NoticiaComponent as UserNoticiaComponent } from './user/user-noticia-component/user-noticia-component';
 import { UserAuthGuard } from './user/user.module';
 
 export const routes: Routes = [
@@ -38,8 +38,8 @@ export const routes: Routes = [
     component: UserDashboardComponent,
     canActivate: [UserAuthGuard],
     children: [
-      { path: 'juego', component: UsuarioComponent },
-      { path: 'noticia', component: UsuarioComponent }
+      { path: 'juego', component: UserJuegoComponent },
+      { path: 'noticia', component: UserNoticiaComponent }
     ]
   }
 ];

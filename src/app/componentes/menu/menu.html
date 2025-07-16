@@ -1,18 +1,28 @@
 <nav>
   <ng-container *ngIf="isLoggedIn$ | async; else login">
     <ul class="nav-left">
-       <li>
-         <a [routerLink]="['/admin/empresa']">Empresa</a>
-       </li>
-       <li>
-         <a [routerLink]="['/admin/juego']">Juegos</a>
-       </li>
-       <li>
-         <a [routerLink]="['/admin/noticia']">Noticias</a>
-       </li>
-       <li>
-         <a [routerLink]="['/admin/usuario']">Usuarios</a>
-       </li>
+      <ng-container *ngIf="tipoUsuario === 'admin'; else userMenu">
+        <li>
+          <a [routerLink]="['/admin/empresa']">Empresa</a>
+        </li>
+        <li>
+          <a [routerLink]="['/admin/juego']">Juegos</a>
+        </li>
+        <li>
+          <a [routerLink]="['/admin/noticia']">Noticias</a>
+        </li>
+        <li>
+          <a [routerLink]="['/admin/usuario']">Usuarios</a>
+        </li>
+      </ng-container>
+      <ng-template #userMenu>
+        <li>
+          <a [routerLink]="['/user/juego']">Juegos</a>
+        </li>
+        <li>
+          <a [routerLink]="['/user/noticia']">Noticias</a>
+        </li>
+      </ng-template>
     </ul>
     <div class="nav-right">
       <button class="cart-icon" (click)="toggleCart()">
@@ -23,9 +33,6 @@
     </div>
     <app-contador-token class="token-chip"></app-contador-token>
   </ng-container>
-
-
-  
 
   <ng-template #login>
     <ul class="nav-left">

@@ -11,24 +11,19 @@ import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqued
 
 @Component({
   standalone: true,
-  selector: 'app-noticia-component',
-  templateUrl: './noticia-component.html',
-  styleUrls: ['./noticia-component.css'],
+  selector: 'app-user-noticia-component',
+  templateUrl: './user-noticia-component.html',
+  styleUrls: ['./user-noticia-component.css'],
   imports: [CommonModule, FormsModule,ReactiveFormsModule, BusquedaBarraComponent],
-  
 })
 export class NoticiaComponent implements OnInit {
   noticias: any[] = [];
   formNoticia!: FormGroup;
-
   imagenesPreview: string[] = [];  // Muestra en preview (base64 + URLs)
   imagenesBase64: string[] = [];   // Solo base64 (archivos)
   imagenesUrl: string[] = [];      // Solo URLs agregadas manualmente
-
   nuevaUrl: string = '';           // Para input URL
-
   modalVisible = false;
-
   // Filtros y autocompletado
   tags: string[] = ['Trailer', 'DLC', 'Actualización', 'Lanzamiento', 'Evento', 'Anuncio'];
   tagSeleccionado: string = '';
@@ -38,20 +33,19 @@ export class NoticiaComponent implements OnInit {
   juegoSugerencias: string[] = [];
   mostrarSugerenciasTitulo: boolean = false;
   mostrarSugerenciasJuego: boolean = false;
+  sugerenciasCombinadas: { tipo: 'titulo' | 'juego', valor: string }[] = [];
 
   constructor(private fb: FormBuilder, private noticiaService: NoticiaServicio, private juegoService: JuegoServicio) {}
 
   ngOnInit(): void {
     console.log('🚀 NoticiaComponent inicializado');
     console.log('🔍 Verificando autenticación...');
-    
     this.formNoticia = this.fb.group({
       secuencial: [null],
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
       estadoNoticia: [1],
     });
-
     console.log('📋 Formulario inicializado');
     this.cargarNoticias();
   }
@@ -67,7 +61,6 @@ export class NoticiaComponent implements OnInit {
   cargarNoticias() {
     console.log('🔄 Cargando noticias...');
     console.log('🌐 URL del API:', `${environment.urlApi}/noticia`);
-    
     this.noticiaService.getNoticias().subscribe({
       next: (data) => {
         console.log('✅ Noticias cargadas:', data);
@@ -85,16 +78,13 @@ export class NoticiaComponent implements OnInit {
       }
     });
   }
-
   abrirModal(noticia?: Noticia) {
     this.formNoticia.reset({ estadoNoticia: 1 });
     this.imagenesPreview = [];
     this.imagenesBase64 = [];
     this.imagenesUrl = [];
-
     if (noticia) {
       this.formNoticia.patchValue(noticia);
-
       // Separar URLs y base64 en arrays diferentes para control
       noticia.noticiaImagens.forEach(i => {
         if (i.url.startsWith('data:image/')) {
@@ -106,10 +96,8 @@ export class NoticiaComponent implements OnInit {
         }
       });
     }
-
     this.modalVisible = true;
   }
-
   cerrarModal() {
     this.modalVisible = false;
   }
@@ -128,12 +116,9 @@ export class NoticiaComponent implements OnInit {
       alert('Por favor ingresa una URL válida que comience con http:// o https://');
     }
   }
-
   eliminarImagen(index: number) {
     const img = this.imagenesPreview[index];
-
     this.imagenesPreview.splice(index, 1);
-
     const base64Index = this.imagenesBase64.indexOf(img);
     if (base64Index !== -1) {
       this.imagenesBase64.splice(base64Index, 1);
@@ -144,33 +129,26 @@ export class NoticiaComponent implements OnInit {
       }
     }
   }
-
   onFileChange(event: any) {
     const files: FileList = event.target.files;
-
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
-
         reader.onload = (e: any) => {
           this.imagenesBase64.push(e.target.result);
           this.imagenesPreview.push(e.target.result);
         };
-
         reader.readAsDataURL(file);
       }
     }
   }
-
   guardarNoticia() {
     if (this.formNoticia.invalid) {
       this.formNoticia.markAllAsTouched();
       return;
     }
-
     const noticiaData = this.formNoticia.value;
-
     noticiaData.noticiaImagens = [
       ...this.imagenesBase64.map(base64 => ({
         secuencial: 0,
@@ -183,9 +161,7 @@ export class NoticiaComponent implements OnInit {
         estadoImagen: 1,
       })),
     ];
-
     console.log("Noticia a enviar:", this.cleanCircularReferences(noticiaData));
-
     // Si `secuencial` existe, actualizamos
     if (noticiaData.secuencial) {
       this.noticiaService.actualizarNoticia(noticiaData.secuencial, this.cleanCircularReferences(noticiaData)).subscribe({
@@ -210,7 +186,6 @@ export class NoticiaComponent implements OnInit {
       });
     }
   }
-
   cleanCircularReferences(obj: any) {
     const seen = new WeakSet();
     return JSON.parse(JSON.stringify(obj, (key, value) => {
@@ -221,11 +196,9 @@ export class NoticiaComponent implements OnInit {
       return value;
     }));
   }
-
   eliminarNoticia(id: number) {
     this.noticiaService.eliminarNoticia(id).subscribe(() => this.cargarNoticias());
   }
-
   buscarPorTag() {
     if (this.tagSeleccionado) {
       this.noticiaService.buscarPorTag(this.tagSeleccionado).subscribe(noticias => {
@@ -235,7 +208,6 @@ export class NoticiaComponent implements OnInit {
       this.cargarNoticias();
     }
   }
-
   buscarPorTitulo() {
     if (this.tituloBusqueda) {
       this.noticiaService.buscarPorTitulo(this.tituloBusqueda).subscribe(noticias => {
@@ -245,7 +217,6 @@ export class NoticiaComponent implements OnInit {
       this.cargarNoticias();
     }
   }
-
   buscarPorJuego() {
     if (this.juegoBusqueda) {
       this.noticiaService.buscarPorJuego(this.juegoBusqueda).subscribe(noticias => {
@@ -255,7 +226,6 @@ export class NoticiaComponent implements OnInit {
       this.cargarNoticias();
     }
   }
-
   // Sugerencias de título (autocompletado)
   obtenerSugerenciasTitulo(event: any) {
     const texto = event.target.value;
@@ -270,13 +240,11 @@ export class NoticiaComponent implements OnInit {
       this.mostrarSugerenciasTitulo = false;
     }
   }
-
   seleccionarSugerenciaTitulo(titulo: string) {
     this.tituloBusqueda = titulo;
     this.mostrarSugerenciasTitulo = false;
     this.buscarPorTitulo();
   }
-
   // Sugerencias de nombre de juego (autocompletado)
   obtenerSugerenciasJuego(event: any) {
     const texto = event.target.value;
@@ -291,13 +259,11 @@ export class NoticiaComponent implements OnInit {
       this.mostrarSugerenciasJuego = false;
     }
   }
-
   seleccionarSugerenciaJuego(nombre: string) {
     this.juegoBusqueda = nombre;
     this.mostrarSugerenciasJuego = false;
     this.buscarPorJuego();
   }
-
   // Buscar combinando filtros (opcional, para búsquedas avanzadas)
   buscarNoticiasFiltradas() {
     if (this.tagSeleccionado) {
@@ -310,21 +276,24 @@ export class NoticiaComponent implements OnInit {
       this.cargarNoticias();
     }
   }
-
+  // Métodos conectados a la barra reutilizable
   onBusquedaBarra(event: {tipo: string, texto: string, opcion: string|null}) {
     switch (event.tipo) {
       case 'titulo':
-        this.tituloBusqueda = event.texto;
-        this.buscarPorTitulo();
+        this.noticiaService.buscarPorTitulo(event.texto).subscribe(noticias => {
+          this.noticias = noticias;
+        });
         break;
       case 'juego':
-        this.juegoBusqueda = event.texto;
-        this.buscarPorJuego();
+        this.noticiaService.buscarPorJuego(event.texto).subscribe(noticias => {
+          this.noticias = noticias;
+        });
         break;
       case 'tag':
         if (event.opcion) {
-          this.tagSeleccionado = event.opcion;
-          this.buscarPorTag();
+          this.noticiaService.buscarPorTag(event.opcion).subscribe(noticias => {
+            this.noticias = noticias;
+          });
         }
         break;
       default:
@@ -332,24 +301,31 @@ export class NoticiaComponent implements OnInit {
     }
   }
   onAutocompletarBarra(event: {tipo: string, texto: string}) {
-    if (event.tipo === 'titulo') this.obtenerSugerenciasTitulo({target: {value: event.texto}});
-    if (event.tipo === 'juego') this.obtenerSugerenciasJuego({target: {value: event.texto}});
+    if (event.tipo === 'combinado') {
+      this.noticiaService.sugerenciasTitulo(event.texto).subscribe(noticias => {
+        const titulos = noticias.map(n => ({ tipo: 'titulo' as const, valor: n.titulo }));
+        this.juegoService.sugerenciasNombre(event.texto).subscribe((juegos: Juego[]) => {
+          const juegosArr = juegos.map(j => ({ tipo: 'juego' as const, valor: j.nombre }));
+          this.sugerenciasCombinadas = [...titulos, ...juegosArr];
+        });
+      });
+    }
   }
   onSeleccionarSugerenciaBarra(event: {tipo: string, valor: string}) {
     if (event.tipo === 'titulo') {
-      this.tituloBusqueda = event.valor;
-      this.buscarPorTitulo();
+      this.noticiaService.buscarPorTitulo(event.valor).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+      this.mostrarSugerenciasTitulo = false;
     }
     if (event.tipo === 'juego') {
-      this.juegoBusqueda = event.valor;
-      this.buscarPorJuego();
+      this.noticiaService.buscarPorJuego(event.valor).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+      this.mostrarSugerenciasJuego = false;
     }
   }
-
   limpiarFiltros() {
-    this.tagSeleccionado = '';
-    this.tituloBusqueda = '';
-    this.juegoBusqueda = '';
     this.tituloSugerencias = [];
     this.juegoSugerencias = [];
     this.mostrarSugerenciasTitulo = false;

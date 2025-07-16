@@ -23,7 +23,7 @@ import { PiePagina } from './componentes/pie-pagina/pie-pagina';
   styleUrl: './app.css'
 })
 export class App implements OnInit{
-  protected title = 'web6_PAGINA';
+  protected title = 'GameVortex';
   constructor(private empresaServicio: EmpresaServicio){}
     empresa?: Empresa;
    

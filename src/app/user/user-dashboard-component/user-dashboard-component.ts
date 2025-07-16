@@ -7,11 +7,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard-component',
+  selector: 'app-user-dashboard-component',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './dashboard-component.html',
-  styleUrls: ['./dashboard-component.css']
+  templateUrl: './user-dashboard-component.html',
+  styleUrls: ['./user-dashboard-component.css']
 })
 export class DashboardComponent implements OnInit {
   usuarios: Usuario[] = [];

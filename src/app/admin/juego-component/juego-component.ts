@@ -3,13 +3,13 @@ import { Juego } from '../../modelos/Juego';
 import { JuegoServicio } from '../../servicios/juego-servicio';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule, SlicePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule, SlicePipe } from '@angular/common';
 import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqueda-barra';
 
 @Component({
   selector: 'app-juego-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlicePipe, CurrencyPipe, BusquedaBarraComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SlicePipe, BusquedaBarraComponent],
   templateUrl: './juego-component.html',
   styleUrls: ['./juego-component.css']
 })
