@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Empresa } from '../../modelos/Empresa';
+import { EmpresaServicio } from '../../servicios/empresa-servicio';
 
 @Component({
   selector: 'app-pie-pagina',
@@ -11,39 +12,20 @@ import { Empresa } from '../../modelos/Empresa';
 export class PiePagina implements OnInit {
   empresa?: Empresa;
   currentYear: number = new Date().getFullYear();
+  redes: any[] = [];
 
-  redesSociales = {
-    facebook: "https://facebook.com/miempresa",
-    twitter: "https://twitter.com/miempresa",
-    instagram: "https://instagram.com/miempresa",
-    linkedin: "https://linkedin.com/company/miempresa",
-    youtube: "https://youtube.com/@miempresa",
-    whatsapp: "593987654321"
-  };
+  constructor(private empresaServicio: EmpresaServicio) {}
 
   ngOnInit() {
-    this.cargarEmpresa();
-  }
-
-  private cargarEmpresa() {
-    const empresaJson = localStorage.getItem('empresa');
-    if (empresaJson) {
-      try {
-        this.empresa = JSON.parse(empresaJson);
-        console.log('Empresa cargada en pie de página:', this.empresa);
-      } catch (error) {
-        console.error('Error al cargar empresa en pie de página:', error);
-        this.empresa = undefined;
+    this.empresaServicio.getEmpresa().subscribe({
+      next: (empresa) => {
+        this.empresa = empresa;
+        this.redes = empresa.redesSociales || [];
+      },
+      error: (err) => {
+        console.error('Error obteniendo empresa', err);
       }
-    } else {
-      console.log('No hay datos de empresa en localStorage');
-      this.empresa = undefined;
-    }
-  }
-
-  // Método para recargar información si es necesario
-  recargarEmpresa(): void {
-    this.cargarEmpresa();
+    });
   }
 
   // Método para verificar si hay información suficiente

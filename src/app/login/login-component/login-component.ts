@@ -22,7 +22,11 @@ export class LoginComponent {
       localStorage.setItem('exp', (decoded.exp * 1000).toString());
       localStorage.setItem('tipoUsuario', decoded.tipoUsuario);
       
-      this.router.navigate(['/admin/juego']);
+      if (decoded.tipoUsuario === 'admin') {
+        this.router.navigate(['/admin/juego']);
+      } else {
+        this.router.navigate(['/user/juego']);
+      }
     });
   }
   

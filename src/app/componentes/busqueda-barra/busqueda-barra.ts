@@ -72,28 +72,34 @@ export class BusquedaBarraComponent {
   }
 
   onBuscar() {
-    // Si hay texto en el input de nombre, buscar por nombre
     if (this.tipo === 'juegos') {
       if (this.busquedaTexto && this.busquedaTexto.trim().length > 0) {
         this.buscar.emit({ tipo: 'nombre', texto: this.busquedaTexto, opcion: null });
         return;
       }
-      // Si hay filtro seleccionado
       if (this.busquedaTipo && this.busquedaOpcion) {
         this.buscar.emit({ tipo: this.busquedaTipo, texto: '', opcion: this.busquedaOpcion });
         return;
       }
-      // Si no hay nada, buscar todo
       this.buscar.emit({ tipo: 'todos', texto: '', opcion: null });
       return;
     }
-    // Para noticias, mantener la lógica existente
-    this.buscar.emit({ tipo: this.busquedaTipo, texto: this.busquedaTexto, opcion: this.busquedaOpcion });
+    // Noticias: igualar lógica a juegos
+    if (this.busquedaTexto && this.busquedaTexto.trim().length > 0) {
+      this.buscar.emit({ tipo: 'titulo', texto: this.busquedaTexto, opcion: null });
+      return;
+    }
+    if (this.busquedaTag) {
+      this.buscar.emit({ tipo: 'tag', texto: '', opcion: this.busquedaTag });
+      return;
+    }
+    this.buscar.emit({ tipo: 'todas', texto: '', opcion: null });
   }
   onLimpiar() {
     this.busquedaTexto = '';
     this.busquedaOpcion = null;
     this.busquedaTipo = this.tipo === 'juegos' ? 'nombre' : 'titulo';
+    this.busquedaTag = null;
     this.limpiar.emit();
   }
   onTipoChange(tipo: string) {

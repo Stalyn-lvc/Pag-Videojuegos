@@ -16,14 +16,9 @@
       <div class="redes-sociales">
         <div class="titulo-redes">Síguenos en redes sociales</div>
         <div class="iconos-redes">
-          <a *ngIf="redesSociales.facebook" [href]="redesSociales.facebook" class="enlace-red facebook" target="_blank" rel="noopener">
-            <span class="icono-red">🌐</span> Facebook
-          </a>
-          <a *ngIf="redesSociales.instagram" [href]="redesSociales.instagram" class="enlace-red instagram" target="_blank" rel="noopener">
-            <span class="icono-red">📸</span> Instagram
-          </a>
-          <a *ngIf="redesSociales.youtube" [href]="redesSociales.youtube" class="enlace-red youtube" target="_blank" rel="noopener">
-            <span class="icono-red">▶️</span> YouTube
+          <a *ngFor="let red of redes" [href]="red.url" class="enlace-red" target="_blank" rel="noopener">
+            <img [src]="red.logo" [alt]="red.nombre" width="32" height="32" style="vertical-align:middle; margin-right:8px;" />
+            {{ red.nombre }}
           </a>
         </div>
       </div>

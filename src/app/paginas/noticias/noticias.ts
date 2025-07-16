@@ -168,7 +168,11 @@ export class Noticias implements OnInit, OnDestroy {
     this.juegoSugerencias = [];
     this.mostrarSugerenciasTitulo = false;
     this.mostrarSugerenciasJuego = false;
-    this.cargarNoticias();
+    // Recargar todas las noticias desde el backend
+    this.noticiaService.getNoticias().subscribe(data => {
+      this.noticias = data;
+      this.actualizarPaginacion();
+    });
   }
 
   // Método para buscar combinando filtros (igual que antes)

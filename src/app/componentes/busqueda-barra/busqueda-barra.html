@@ -1,32 +1,30 @@
 <div class="busqueda-barra" *ngIf="tipo === 'juegos'">
-  <!-- Fila superior: búsqueda por nombre y filtros -->
-  <div class="busqueda-nombre-row d-flex align-items-center mb-2 position-relative">
+  <div class="busqueda-nombre-row">
     <label for="nombreJuego" class="form-label mb-0 me-2">Nombre del juego:</label>
-    <input
-      id="nombreJuego"
-      type="text"
-      class="form-control"
-      [placeholder]="'Buscar por nombre...'"
-      [(ngModel)]="busquedaTexto"
-      name="busquedaTexto"
-      (input)="onAutocompletar($event)"
-      (focus)="onAutocompletar($event)"
-      (blur)="mostrarSugerenciasNombre = false"
-      autocomplete="off"
-      style="max-width: 250px;"
-    />
-    <!-- Sugerencias -->
-    <ul *ngIf="mostrarSugerenciasNombre && nombreSugerencias.length" class="list-group position-absolute w-100" style="z-index:10; top: 38px; left: 120px; max-width: 250px;">
-      <li *ngFor="let sugerencia of nombreSugerencias" class="list-group-item list-group-item-action" (mousedown)="onSeleccionarSugerencia(sugerencia)">
-        <span>🎮</span> {{ sugerencia }}
-      </li>
-    </ul>
+    <div class="input-sugerencias-wrapper">
+      <input
+        id="nombreJuego"
+        type="text"
+        class="form-control"
+        [placeholder]="'Buscar por nombre...'"
+        [(ngModel)]="busquedaTexto"
+        name="busquedaTexto"
+        (input)="onAutocompletar($event)"
+        (focus)="onAutocompletar($event)"
+        (blur)="mostrarSugerenciasNombre = false"
+        autocomplete="off"
+      />
+      <!-- Sugerencias -->
+      <ul *ngIf="mostrarSugerenciasNombre && nombreSugerencias.length" class="list-group sugerencias-dropdown">
+        <li *ngFor="let sugerencia of nombreSugerencias" class="list-group-item list-group-item-action" (mousedown)="onSeleccionarSugerencia(sugerencia)">
+          <span>🎮</span> {{ sugerencia }}
+        </li>
+      </ul>
+    </div>
   </div>
-
-  <!-- Fila inferior: selectores de filtro -->
   <div class="busqueda-filtros-row d-flex align-items-center mt-2">
     <label for="busquedaTipo" class="form-label mb-0 me-2">Filtrar por:</label>
-    <select id="busquedaTipo" class="form-select me-2" [(ngModel)]="busquedaTipo" name="busquedaTipo" (change)="onTipoChange(busquedaTipo)" style="max-width: 140px;"
+    <select id="busquedaTipo" class="form-select me-2" [(ngModel)]="busquedaTipo" name="busquedaTipo" (change)="onTipoChange(busquedaTipo)"
       [ngClass]="{'placeholder-option': !busquedaTipo}">
       <option value="" disabled selected hidden>Filtrar por...</option>
       <option value="genero">Género</option>
@@ -34,57 +32,54 @@
       <option value="ranquin">Ranquin</option>
     </select>
     <label for="busquedaOpcion" class="form-label mb-0 me-2 visually-hidden">Opción de filtro</label>
-    <select *ngIf="busquedaTipo" id="busquedaOpcion" class="form-select me-2" [(ngModel)]="busquedaOpcion" name="busquedaOpcion" (change)="onOpcionChange(busquedaOpcion || '')" style="max-width: 180px;"
+    <select *ngIf="busquedaTipo" id="busquedaOpcion" class="form-select me-2" [(ngModel)]="busquedaOpcion" name="busquedaOpcion" (change)="onOpcionChange(busquedaOpcion || '')"
       [ngClass]="{'placeholder-option': !busquedaOpcion}">
       <option value="" disabled selected hidden>
         {{ busquedaTipo === 'genero' ? 'Seleccione género...' : (busquedaTipo === 'precio' ? 'Seleccione precio...' : 'Seleccione ranquin...') }}
       </option>
       <option *ngFor="let op of opcionesSelector" [ngValue]="op">{{ op.label || op }}</option>
     </select>
-  </div>
-
-  <!-- Botones generales -->
-  <div class="busqueda-botones-row d-flex align-items-center mt-3">
     <button type="button" class="btn btn-outline-primary me-2" (click)="onBuscar()">Buscar</button>
     <button type="button" class="btn btn-secondary" (click)="onLimpiar()">Limpiar</button>
   </div>
 </div>
 
 <div class="busqueda-barra" *ngIf="tipo === 'noticias'">
-  <div class="busqueda-nombre-row d-flex align-items-center mb-2 position-relative">
+  <div class="busqueda-nombre-row">
     <label for="busquedaNoticia" class="form-label mb-0 me-2">Buscar noticia o juego:</label>
-    <input
-      id="busquedaNoticia"
-      type="text"
-      class="form-control"
-      [placeholder]="'Buscar por título o nombre de juego...'"
-      [(ngModel)]="busquedaTexto"
-      name="busquedaNoticia"
-      (input)="onAutocompletarCombinado($event)"
-      (focus)="onAutocompletarCombinado($event)"
-      (blur)="mostrarSugerenciasCombinadas = false"
-      autocomplete="off"
-      style="max-width: 250px;"
-    />
-    <ul *ngIf="mostrarSugerenciasCombinadas && sugerenciasCombinadas.length" class="list-group position-absolute w-100" style="z-index:10; top: 38px; left: 140px; max-width: 250px;">
-      <li *ngFor="let sugerencia of sugerenciasCombinadas"
-          class="list-group-item list-group-item-action"
-          (mousedown)="onSeleccionarSugerenciaCombinada(sugerencia)">
-        <span *ngIf="sugerencia.tipo === 'titulo'">📰</span>
-        <span *ngIf="sugerencia.tipo === 'juego'">🎮</span>
-        {{ sugerencia.valor }}
-      </li>
-    </ul>
+    <div class="input-sugerencias-wrapper">
+      <input
+        id="busquedaNoticia"
+        type="text"
+        class="form-control"
+        [placeholder]="'Buscar por título o nombre de juego...'"
+        [(ngModel)]="busquedaTexto"
+        name="busquedaNoticia"
+        (input)="onAutocompletarCombinado($event)"
+        (focus)="onAutocompletarCombinado($event)"
+        (blur)="mostrarSugerenciasCombinadas = false"
+        autocomplete="off"
+      />
+      <ul *ngIf="mostrarSugerenciasCombinadas && sugerenciasCombinadas.length" class="list-group sugerencias-dropdown">
+        <li *ngFor="let sugerencia of sugerenciasCombinadas"
+            class="list-group-item list-group-item-action"
+            (mousedown)="onSeleccionarSugerenciaCombinada(sugerencia)">
+          <span *ngIf="sugerencia.tipo === 'titulo'">📰</span>
+          <span *ngIf="sugerencia.tipo === 'juego'">🎮</span>
+          {{ sugerencia.valor }}
+        </li>
+      </ul>
+    </div>
   </div>
   <!-- Filtro por tag igual que antes -->
   <div class="busqueda-filtros-row d-flex align-items-center mt-2">
     <label for="busquedaTag" class="form-label mb-0 me-2">Filtrar por:</label>
-    <select id="busquedaTag" class="form-select me-2" [(ngModel)]="busquedaTag" name="busquedaTag" (change)="onTagChange($any($event.target).value)" style="max-width: 180px;"
+    <select id="busquedaTag" class="form-select me-2" [(ngModel)]="busquedaTag" name="busquedaTag" (change)="onTagChange($any($event.target).value)"
       [ngClass]="{'placeholder-option': !busquedaTag}">
       <option value="" disabled selected hidden>Seleccione tag...</option>
-      <option *ngFor="let tag of tags" [ngValue]="tag">{{ tag }}</option>
+      <option *ngFor="let tag of tags" [value]="tag">{{ tag }}</option>
     </select>
-    <button type="button" class="btn btn-outline-primary ms-2" (click)="onBuscar()">Buscar</button>
-    <button type="button" class="btn btn-secondary ms-2" (click)="onLimpiarNoticia()">Limpiar</button>
+    <button type="button" class="btn btn-outline-primary me-2" (click)="onBuscar()">Buscar</button>
+    <button type="button" class="btn btn-secondary" (click)="onLimpiar()">Limpiar</button>
   </div>
 </div>

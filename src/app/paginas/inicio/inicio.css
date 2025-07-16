@@ -147,6 +147,157 @@ app-pie-pagina {
   margin-top: 30px; /* Separación desde el contenido anterior */
 }
 
+.ofertas-especiales-container, .noticias-recientes-container {
+  max-width: 700px;
+  margin: 40px auto 32px auto;
+  padding: 28px 24px 24px 24px;
+  background: linear-gradient(135deg, #fffbe6 60%, #ffe5e5 100%);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(139,0,0,0.13), 0 1.5px 8px rgba(139,0,0,0.08);
+  border: 3.5px solid #8b0000;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+.ofertas-especiales-container::before, .noticias-recientes-container::before {
+  content: '';
+  position: absolute;
+  top: -40px; left: -40px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, #ff6347 0%, #fffbe6 80%, transparent 100%);
+  opacity: 0.13;
+  z-index: 0;
+}
+
+.ofertas-especiales-container h2, .noticias-recientes-container h2 {
+  text-align: left;
+  font-size: 2.1rem;
+  margin-bottom: 18px;
+  color: #8b0000;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #fffbe6, 0 1px 0 #8b0000;
+  position: relative;
+  z-index: 1;
+}
+
+/* Reutilizar estilos de juegos y noticias */
+.grid-juegos, .grid-noticias {
+  display: flex;
+  gap: 28px;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: wrap;
+  z-index: 1;
+  position: relative;
+}
+
+.juego-card, .noticia-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 2.5px solid #8b0000;
+  box-shadow: 0 2px 12px rgba(139,0,0,0.10);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s, box-shadow 0.22s;
+  margin-bottom: 8px;
+  min-width: 220px;
+  max-width: 320px;
+  flex: 1 1 220px;
+  cursor: pointer;
+}
+
+.juego-card:hover, .noticia-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(139,0,0,0.18);
+  border-color: #ff6347;
+}
+
+.imagen-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 0 12px 0;
+  background: linear-gradient(90deg, #fffbe6 60%, #ffe5e5 100%);
+}
+
+.imagen-container img {
+  width: 100%;
+  height: auto;
+  max-height: 160px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(139, 0, 0, 0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.contenido-juego, .contenido-noticia {
+  padding: 18px 15px 12px 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.contenido-juego h3, .contenido-noticia h3 {
+  margin: 0 0 10px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #8b0000;
+}
+
+.contenido-juego p, .contenido-noticia p {
+  margin: 0 0 10px;
+  color: #444;
+  font-size: 1rem;
+  flex-grow: 1;
+}
+
+/* Botón 'Ver más' de juegos */
+.contenido-juego button {
+  align-self: flex-start;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e74c3c !important;
+  color: #fffbe6 !important;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background-color 0.3s, color 0.3s;
+}
+.contenido-juego button:hover {
+  background-color: #ff6347 !important;
+  color: #fffbe6 !important;
+}
+
+/* Botón 'Ver más' de noticias */
+.contenido-noticia button {
+  align-self: flex-start;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e74c3c !important;
+  color: #fffbe6 !important;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  transition: background-color 0.3s, color 0.3s;
+}
+.contenido-noticia button:hover {
+  background-color: #ff6347 !important;
+  color: #fffbe6 !important;
+}
+
 /* Responsividad */
 @media (max-width: 768px) {
   .empresa-detalle {
@@ -157,4 +308,110 @@ app-pie-pagina {
   .cuadro {
     max-width: 90%;
   }
+  .grid-juegos, .grid-noticias {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  .ofertas-especiales-container, .noticias-recientes-container {
+    padding: 10px 2px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ofertas-especiales-container, .noticias-recientes-container {
+    max-width: 98vw;
+    padding: 12px 2vw;
+  }
+  .grid-juegos, .grid-noticias {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .juego-card, .noticia-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .ofertas-especiales-container {
+    max-width: 98vw;
+    padding: 14px 2vw;
+  }
+  .juego-card {
+    max-width: 98vw;
+  }
+}
+
+/* Botones reutilizados de juegos y noticias */
+.btn-carrito {
+  background-color: #8b0000 !important;
+  color: #fffbe6 !important;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+  border: none;
+  transition: background 0.25s, color 0.25s, transform 0.18s;
+  display: inline-block;
+  width: auto;
+  min-width: 120px;
+  max-width: 200px;
+}
+.btn-carrito:hover {
+  background-color: #b71c1c !important;
+  color: #ffe066 !important;
+  transform: translateY(-2px) scale(1.06);
+}
+
+.botones-juego {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.botones-juego button,
+.botones-juego .btn-carrito {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-top: 0;
+  width: auto;
+  white-space: nowrap;
+}
+
+.ofertas-especiales-container {
+  max-width: 1100px;
+  padding: 28px 32px 24px 32px;
+}
+
+/* Ajuste intermedio para el container de juegos */
+.ofertas-especiales-container {
+  max-width: 900px;
+  padding: 24px 20px 20px 20px;
+}
+
+.grid-juegos {
+  justify-content: center;
+  gap: 32px;
+}
+
+.juego-card {
+  max-width: 420px;
+  min-width: 260px;
+}
+
+/* Ajuste intermedio para misión y visión */
+.empresa-container .cuadro {
+  min-height: 140px;
+  padding: 20px 18px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #fffbe6;
+  box-shadow: 0 2px 8px rgba(139,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

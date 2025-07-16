@@ -9,4 +9,10 @@ export interface Empresa{
     anio:string;
     realizadopor:string;
     banners?:Banner[];
+    redesSociales?: {
+        id: number;
+        nombre: string;
+        url: string;
+        logo: string;
+    }[];
 }

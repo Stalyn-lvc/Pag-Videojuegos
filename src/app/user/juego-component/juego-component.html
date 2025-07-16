@@ -1,0 +1,130 @@
+<div class="juegos-admin">
+  <h2>Administrar Juegos</h2>
+  <button class="btn btn-primary my-2" (click)="abrirModal()">Crear Nuevo Juego</button>
+
+  <app-busqueda-barra
+    [tipo]="'juegos'"
+    [generos]="generos"
+    [rangosPrecio]="rangosPrecio"
+    [rangosRanking]="rangosRanking"
+    [nombreSugerencias]="nombreSugerencias"
+    [mostrarSugerenciasNombre]="mostrarSugerenciasNombre"
+    (buscar)="onBusquedaBarra($event)"
+    (limpiar)="limpiarFiltros()"
+    (autocompletar)="onAutocompletar($event)"
+    (seleccionarSugerencia)="onSeleccionarSugerencia($event)">
+  </app-busqueda-barra>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Imágenes</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let juego of juegos">
+        <td>{{ juego.nombre }}</td>
+        <td>{{ juego.descripcion | slice:0:100 }}...</td>
+        <td>
+          <div class="slider-container" *ngIf="juego.juegoImagens?.length">
+            <img
+              [src]="juego.juegoImagens[juego.sliderIndex || 0].url"
+              class="slider-img imagen-tabla"
+              alt="Imagen juego"
+            />
+            <div class="slider-controls">
+              <button
+                (click)="cambiarImagen(juego, -1)"
+                [disabled]="(juego.sliderIndex || 0) === 0"
+              >
+                ‹
+              </button>
+              <button
+                (click)="cambiarImagen(juego, 1)"
+                [disabled]="(juego.sliderIndex || 0) === juego.juegoImagens.length - 1"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="acciones-vertical">
+            <button class="btn btn-warning btn-sm me-2" (click)="abrirModal(juego)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarJuego(juego.secuencial)">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal CSS-only -->
+  <div class="modal" [class.show]="modalVisible">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <h3>{{ formJuego.value.secuencial ? 'Editar Juego' : 'Crear Juego' }}</h3>
+
+      <form [formGroup]="formJuego" (ngSubmit)="guardarJuego()">
+        <div class="form-group">
+          <label>Nombre:</label>
+          <input type="text" formControlName="nombre" />
+          <div class="error" *ngIf="formJuego.get('nombre')?.invalid && formJuego.get('nombre')?.touched">
+            El nombre es obligatorio.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción:</label>
+          <textarea rows="5" formControlName="descripcion"></textarea>
+          <div class="error" *ngIf="formJuego.get('descripcion')?.invalid && formJuego.get('descripcion')?.touched">
+            La descripción es obligatoria.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Género:</label>
+          <input type="text" formControlName="genero" />
+        </div>
+        <div class="form-group">
+          <label>Precio:</label>
+          <input type="number" formControlName="precio" />
+        </div>
+        <div class="form-group">
+          <label>Ranquin:</label>
+          <input type="number" formControlName="ranquin" />
+        </div>
+
+        <div class="form-group">
+          <label>Subir imágenes (archivos):</label>
+          <input type="file" multiple (change)="onFileChange($event)" />
+        </div>
+
+        <div class="form-group">
+          <label>Agregar URL de imagen:</label>
+          <input
+            type="text"
+            name="nuevaUrl"
+            [(ngModel)]="nuevaUrl"
+            [ngModelOptions]="{standalone: true}"
+            placeholder="https://ejemplo.com/imagen.jpg"
+            (input)="onInput($event)"
+          />
+          <button type="button" (click)="agregarUrl()">Agregar URL</button>
+        </div>
+
+        <div class="preview-images">
+          <div *ngFor="let img of imagenesPreview; let i = index" style="display:inline-block; position: relative; margin:5px;">
+            <img [src]="img" width="100" />
+            <button type="button" (click)="eliminarImagen(i)" style="position:absolute; top:0; right:0;">X</button>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="formJuego.invalid">Guardar</button>
+        <button type="button" (click)="cerrarModal()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+</div> 
