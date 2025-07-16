@@ -5,11 +5,45 @@
 
    <div *ngIf="currentNoticia && currentNoticia.noticiaImagens && currentNoticia.noticiaImagens.length > 0"
      class="banner-container">
-      <img [src]="currentNoticia.noticiaImagens[bannerIndex].url" alt="Imagen banner" class="banner-img" />
+      <ng-container *ngIf="isYouTube(currentNoticia.noticiaImagens[bannerIndex].url); else noYoutubeBanner">
+        <iframe [attr.src]="getYouTubeEmbedUrl(currentNoticia.noticiaImagens[bannerIndex].url)" class="banner-img" width="100%" height="350" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe>
+      </ng-container>
+      <ng-template #noYoutubeBanner>
+        <ng-container *ngIf="isVideo(currentNoticia.noticiaImagens[bannerIndex].url); else imagenBanner">
+          <video #mainVideo
+            [src]="currentNoticia.noticiaImagens[bannerIndex].url"
+            [attr.data-index]="bannerIndex"
+            [attr.key]="currentNoticia.noticiaImagens[bannerIndex].url"
+            class="banner-img"
+            controls
+            autoplay
+            muted
+            (error)="onVideoError($event)"
+            style="max-width:100%; max-height:350px; border-radius:10px;">
+          </video>
+          <div *ngIf="videoError" class="video-error">
+            No se pudo reproducir el video. Verifica el formato o la URL.
+          </div>
+        </ng-container>
+        <ng-template #imagenBanner>
+          <img [src]="currentNoticia.noticiaImagens[bannerIndex].url" alt="Imagen banner" class="banner-img" />
+        </ng-template>
+      </ng-template>
 
       <div class="miniaturas">
-        <img *ngFor="let img of currentNoticia.noticiaImagens; let i = index" [src]="img.url"
-          [class.active]="i === bannerIndex" (click)="bannerIndex = i" alt="Miniatura" />
+        <ng-container *ngFor="let img of currentNoticia.noticiaImagens; let i = index">
+          <ng-container *ngIf="isYouTube(img.url); else noYoutubeMini">
+            <iframe [attr.src]="getYouTubeEmbedUrl(img.url)" (click)="bannerIndex = i" width="80" height="50" style="border-radius:6px; cursor:pointer; opacity:0.6; border:2px solid transparent;"></iframe>
+          </ng-container>
+          <ng-template #noYoutubeMini>
+            <ng-container *ngIf="isVideo(img.url); else miniaturaImg">
+              <video [src]="img.url" (click)="bannerIndex = i" [class.active]="i === bannerIndex" style="width:80px; height:50px; border-radius:6px; cursor:pointer; opacity:0.6; border:2px solid transparent;"></video>
+            </ng-container>
+            <ng-template #miniaturaImg>
+              <img [src]="img.url" (click)="bannerIndex = i" [class.active]="i === bannerIndex" alt="Miniatura" />
+            </ng-template>
+          </ng-template>
+        </ng-container>
       </div>
     </div>
 
@@ -28,7 +62,17 @@
   <div *ngIf="noticiasPaginadas.length > 0; else noNoticias" class="grid-noticias">
     <div *ngFor="let noticia of noticiasPaginadas.slice(0, 4)" class="noticia-card">
       <div class="imagen-container">
-        <img [src]="noticia.noticiaImagens[0].url" alt="Imagen resumen" />
+        <ng-container *ngIf="isYouTube(noticia.noticiaImagens[0].url); else noYoutubeThumb">
+          <img [src]="getYouTubeThumbnail(noticia.noticiaImagens[0].url)" alt="Miniatura YouTube" />
+        </ng-container>
+        <ng-template #noYoutubeThumb>
+          <ng-container *ngIf="isVideo(noticia.noticiaImagens[0].url); else miniaturaImgListado">
+            <video [src]="noticia.noticiaImagens[0].url" style="width:100%; max-height:180px; border-radius:6px; background:#000;"></video>
+          </ng-container>
+          <ng-template #miniaturaImgListado>
+            <img [src]="noticia.noticiaImagens[0].url" alt="Imagen resumen" />
+          </ng-template>
+        </ng-template>
       </div>
       <div class="contenido-noticia">
         <h3>{{ noticia.titulo }}</h3>

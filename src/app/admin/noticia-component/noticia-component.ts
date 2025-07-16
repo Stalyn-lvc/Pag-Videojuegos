@@ -38,6 +38,7 @@ export class NoticiaComponent implements OnInit {
   juegoSugerencias: string[] = [];
   mostrarSugerenciasTitulo: boolean = false;
   mostrarSugerenciasJuego: boolean = false;
+  sugerenciasCombinadas: { tipo: 'titulo' | 'juego', valor: string }[] = [];
 
   constructor(private fb: FormBuilder, private noticiaService: NoticiaServicio, private juegoService: JuegoServicio) {}
 
@@ -311,20 +312,24 @@ export class NoticiaComponent implements OnInit {
     }
   }
 
+  // Métodos conectados a la barra reutilizable
   onBusquedaBarra(event: {tipo: string, texto: string, opcion: string|null}) {
     switch (event.tipo) {
       case 'titulo':
-        this.tituloBusqueda = event.texto;
-        this.buscarPorTitulo();
+        this.noticiaService.buscarPorTitulo(event.texto).subscribe(noticias => {
+          this.noticias = noticias;
+        });
         break;
       case 'juego':
-        this.juegoBusqueda = event.texto;
-        this.buscarPorJuego();
+        this.noticiaService.buscarPorJuego(event.texto).subscribe(noticias => {
+          this.noticias = noticias;
+        });
         break;
       case 'tag':
         if (event.opcion) {
-          this.tagSeleccionado = event.opcion;
-          this.buscarPorTag();
+          this.noticiaService.buscarPorTag(event.opcion).subscribe(noticias => {
+            this.noticias = noticias;
+          });
         }
         break;
       default:
@@ -332,24 +337,31 @@ export class NoticiaComponent implements OnInit {
     }
   }
   onAutocompletarBarra(event: {tipo: string, texto: string}) {
-    if (event.tipo === 'titulo') this.obtenerSugerenciasTitulo({target: {value: event.texto}});
-    if (event.tipo === 'juego') this.obtenerSugerenciasJuego({target: {value: event.texto}});
+    if (event.tipo === 'combinado') {
+      this.noticiaService.sugerenciasTitulo(event.texto).subscribe(noticias => {
+        const titulos = noticias.map(n => ({ tipo: 'titulo' as const, valor: n.titulo }));
+        this.juegoService.sugerenciasNombre(event.texto).subscribe((juegos: Juego[]) => {
+          const juegosArr = juegos.map(j => ({ tipo: 'juego' as const, valor: j.nombre }));
+          this.sugerenciasCombinadas = [...titulos, ...juegosArr];
+        });
+      });
+    }
   }
   onSeleccionarSugerenciaBarra(event: {tipo: string, valor: string}) {
     if (event.tipo === 'titulo') {
-      this.tituloBusqueda = event.valor;
-      this.buscarPorTitulo();
+      this.noticiaService.buscarPorTitulo(event.valor).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+      this.mostrarSugerenciasTitulo = false;
     }
     if (event.tipo === 'juego') {
-      this.juegoBusqueda = event.valor;
-      this.buscarPorJuego();
+      this.noticiaService.buscarPorJuego(event.valor).subscribe(noticias => {
+        this.noticias = noticias;
+      });
+      this.mostrarSugerenciasJuego = false;
     }
   }
-
   limpiarFiltros() {
-    this.tagSeleccionado = '';
-    this.tituloBusqueda = '';
-    this.juegoBusqueda = '';
     this.tituloSugerencias = [];
     this.juegoSugerencias = [];
     this.mostrarSugerenciasTitulo = false;

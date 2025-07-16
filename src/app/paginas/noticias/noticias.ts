@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { Noticia } from '../../modelos/Noticias';
 import { NoticiaServicio } from '../../servicios/noticia-servicio';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { JuegoServicio } from '../../servicios/juego-servicio';
 import { Juego } from '../../modelos/Juego';
 import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqueda-barra';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({  
   selector: 'app-noticias',
@@ -14,7 +15,7 @@ import { BusquedaBarraComponent } from '../../componentes/busqueda-barra/busqued
   templateUrl: './noticias.html',
   styleUrls: ['./noticias.css']  // corregí el nombre a plural styleUrls
 })
-export class Noticias implements OnInit, OnDestroy {
+export class Noticias implements OnInit, OnDestroy, AfterViewChecked {
   noticias: Noticia[] = [];
   currentPage = 0;
   itemsPerPage = 4;
@@ -37,7 +38,36 @@ export class Noticias implements OnInit, OnDestroy {
   sugerenciasCombinadas: { tipo: 'titulo' | 'juego', valor: string }[] = [];
   mostrarSugerenciasCombinadas: boolean = false;
 
-  constructor(private noticiaService: NoticiaServicio, private juegoService: JuegoServicio) {}
+  @ViewChild('mainVideo') mainVideoRef!: ElementRef<HTMLVideoElement>;
+  private lastBannerIndex: number = -1;
+  videoError = false;
+  videoLoading = false;
+
+  onVideoLoadStart() {
+    this.videoError = false;
+    this.videoLoading = true;
+  }
+
+  onVideoError(event: Event) {
+    this.videoError = true;
+    console.error('Error al cargar el video:', event, this.currentNoticia?.noticiaImagens[this.bannerIndex].url);
+  }
+
+  cambiarBanner(index: number) {
+    if (
+      this.currentNoticia &&
+      this.currentNoticia.noticiaImagens &&
+      index >= 0 &&
+      index < this.currentNoticia.noticiaImagens.length
+    ) {
+      this.bannerIndex = index;
+      this.videoError = false;
+      this.videoLoading = false;
+      this.startBanner();
+    }
+  }
+
+  constructor(private noticiaService: NoticiaServicio, private juegoService: JuegoServicio, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.noticiaService.getNoticias().subscribe(data => {
@@ -50,10 +80,35 @@ export class Noticias implements OnInit, OnDestroy {
     this.stopBanner();
   }
 
+  ngAfterViewChecked() {
+    // Solo intenta reproducir si el banner cambió, hay video y NO es YouTube
+    if (
+      this.mainVideoRef &&
+      this.mainVideoRef.nativeElement &&
+      this.bannerIndex !== this.lastBannerIndex &&
+      this.currentNoticia &&
+      this.currentNoticia.noticiaImagens &&
+      !this.isYouTube(this.currentNoticia.noticiaImagens[this.bannerIndex].url)
+    ) {
+      const video = this.mainVideoRef.nativeElement;
+      video.load(); // Fuerza recarga
+      video.muted = true;
+      video.play().then(() => {
+        console.log('Video reproduciéndose:', video.src);
+      }).catch((err) => {
+        console.error('No se pudo reproducir el video:', err);
+      });
+      this.lastBannerIndex = this.bannerIndex;
+      this.videoError = false;
+    }
+  }
+
   // Llama esta función cuando asignas currentNoticia para reiniciar el banner
   iniciarDetalle(noticia: Noticia) {
     this.currentNoticia = noticia;
     this.bannerIndex = 0;
+    this.videoError = false;
+    this.videoLoading = false;
     this.startBanner();
   }
 
@@ -264,5 +319,27 @@ export class Noticias implements OnInit, OnDestroy {
       default:
         this.limpiarFiltros();
     }
+  }
+
+  isVideo(url: string): boolean {
+    return /\.(mp4|webm|ogg)$/i.test(url);
+  }
+
+  isYouTube(url: string): boolean {
+    return /youtube\.com\/watch\?v=|youtu\.be\//.test(url);
+  }
+  getYouTubeEmbedUrl(url: string): SafeResourceUrl {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+    const embed = match ? `https://www.youtube.com/embed/${match[1]}` : url;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embed);
+  }
+
+  getYouTubeThumbnail(url: string): string {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+    return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : '';
+  }
+
+  get tieneImagenes(): boolean {
+    return !!(this.currentNoticia && Array.isArray(this.currentNoticia.noticiaImagens) && this.currentNoticia.noticiaImagens.length > 0);
   }
 }

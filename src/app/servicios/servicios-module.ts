@@ -4,6 +4,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environment';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth-service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth-interceptor';
 
 @NgModule({
   declarations: [],
@@ -12,7 +14,12 @@ import { AuthService } from './auth-service';
     HttpClientModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ]
 })
 export class ServiciosModule {

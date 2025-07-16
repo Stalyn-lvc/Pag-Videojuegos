@@ -82,6 +82,38 @@
     </table>
   </div>
 
+  <!-- Gestión de Redes Sociales -->
+  <div class="redes-sociales-section">
+    <h3>Redes Sociales</h3>
+    <button class="btn btn-primary" (click)="agregarRedSocial()">Agregar Red Social</button>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>URL</th>
+          <th>Logo (URL)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let red of empresa.redesSociales; let i = index">
+          <td>
+            <input type="text" [(ngModel)]="red.nombre" class="form-control-sm" placeholder="Nombre de la red" />
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="red.url" class="form-control-sm" placeholder="URL de la red social" />
+          </td>
+          <td>
+            <input type="text" [(ngModel)]="red.logo" class="form-control-sm" placeholder="URL del logo" />
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="quitarRedSocial(i)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <!-- Botón de guardar -->
   <div class="actions-section">
     <button class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>

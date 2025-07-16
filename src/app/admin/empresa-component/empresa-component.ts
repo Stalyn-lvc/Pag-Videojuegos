@@ -27,11 +27,14 @@ export class EmpresaComponent implements OnInit {
   constructor(private empresaService: EmpresaServicio) {}
 
   ngOnInit(): void {
-    this.empresaService.getEmpresa().subscribe({
+    this.empresaService.getEmpresaAdmin().subscribe({
       next: (data) => {
         this.empresa = data;
         if (!this.empresa.banners) {
           this.empresa.banners = [];
+        }
+        if (!this.empresa.redesSociales) {
+          this.empresa.redesSociales = [];
         }
       },
       error: (err) => console.error(err)
@@ -56,6 +59,24 @@ export class EmpresaComponent implements OnInit {
   quitarBanner(index: number) {
     if (this.empresa.banners) {
       this.empresa.banners.splice(index, 1);
+    }
+  }
+
+  agregarRedSocial() {
+    if (!this.empresa.redesSociales) {
+      this.empresa.redesSociales = [];
+    }
+    this.empresa.redesSociales.push({
+      id: 0,
+      nombre: '',
+      url: '',
+      logo: ''
+    });
+  }
+
+  quitarRedSocial(index: number) {
+    if (this.empresa.redesSociales) {
+      this.empresa.redesSociales.splice(index, 1);
     }
   }
 
